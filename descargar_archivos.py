@@ -19,6 +19,7 @@ def obtener_id(servicio, nombre_archivo : str) -> str:
     PRE: servicio debe ser un objeto de tipo Resource con los datos del usuario
     y nombre_archivo una cadena con el nombre del archivo o carpeta que desea
     descargar
+    POST: Devuelve una cadena con el id del archivo indicado
     """
 
     id_archivos = ''
@@ -26,12 +27,10 @@ def obtener_id(servicio, nombre_archivo : str) -> str:
 
     return id_archivos
 
-def main() -> None:
+def descargar():
+    """
+    """
 
-    servicio = obtener_servicio()
-    archivos_en_drive = servicio.files().list().execute()
-    
-    nombre_archivo = ''
     fh = io.FileIO(nombre_archivo, 'r')
     descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud)
     terminado = False
@@ -39,5 +38,10 @@ def main() -> None:
     while terminado is False:
         status, terminado = descargar.next_chunk()
         print("Download %d%%." % int(status.progress() * 100))
+
+def main() -> None:
+
+    servicio = obtener_servicio()
+    archivos_en_drive = servicio.files().list().execute()
 
 main()
