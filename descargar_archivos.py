@@ -3,29 +3,41 @@ import io
 import googleapiclient.http
 from service_drive import obtener_servicio
 
-#Consultar qué tiene el usuario en drive
-servicio = obtener_servicio()
+def pedir_nombre_archivo(servicio, archivos_en_drive) -> str:
+    """
+    """
+    
+    archivo_deseado = input('Indica el nombre del/los archivo/s a descargar: ')
 
-archivos_en_drive = servicio.files().list().execute()
+    while not archivo_deseado in archivos_en_drive:
+        archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
 
-id_archivos = ''    ###obtener id archivo/s
+    return archivo_deseado
 
-solicitud = servicio.files().get_media(fileId=id_archivos)
-nombre_archivo = ''
-fh = io.FileIO(nombre_archivo, 'r')
-descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud)
-terminado = False
+def obtener_id(servicio, nombre_archivo : str) -> str:
+    """
+    PRE: servicio debe ser un objeto de tipo Resource con los datos del usuario
+    y nombre_archivo una cadena con el nombre del archivo o carpeta que desea
+    descargar
+    """
 
-while terminado is False:
-    status, terminado = descargar.next_chunk()
-    print("Download %d%%." % int(status.progress() * 100))
+    id_archivos = ''
+    solicitud = servicio.files().get_media(fileId=id_archivos)
 
-#Validar y guardarme lo que quiere
-archivos_deseados = input('Indica el nombre del/los archivo/s a descargar: ')
+    return id_archivos
 
-while not archivos_deseados in archivos_en_drive:
-    archivos_deseados = input('Archivo inexistente. Vuelve a intentar\n')
+def main() -> None:
 
-#Preguntarle donde lo quiere descargar
+    servicio = obtener_servicio()
+    archivos_en_drive = servicio.files().list().execute()
+    
+    nombre_archivo = ''
+    fh = io.FileIO(nombre_archivo, 'r')
+    descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud)
+    terminado = False
 
-#Guardar en binario archivos deseados en carpeta deseada
+    while terminado is False:
+        status, terminado = descargar.next_chunk()
+        print("Download %d%%." % int(status.progress() * 100))
+
+main()
