@@ -14,6 +14,14 @@ def pedir_nombre_archivo(servicio, archivos_en_drive) -> str:
 
     return archivo_deseado
 
+def pedir_ubicacion():
+    """
+    """
+
+    ubicacion = input('¿Dónde deseas guardar el archivo')
+
+    return ubicacion
+
 def obtener_id(servicio, nombre_archivo : str) -> str:
     """
     PRE: servicio debe ser un objeto de tipo Resource con los datos del usuario
@@ -27,11 +35,11 @@ def obtener_id(servicio, nombre_archivo : str) -> str:
 
     return id_archivos
 
-def descargar():
+def descargar(id_archivos):
     """
     """
 
-    fh = io.FileIO(nombre_archivo, 'r')
+    fh = io.FileIO(id_archivos, 'r')
     descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud)
     terminado = False
 
@@ -43,5 +51,9 @@ def main() -> None:
 
     servicio = obtener_servicio()
     archivos_en_drive = servicio.files().list().execute()
+
+    id_archivos = pedir_nombre_archivo(servicio, archivos_en_drive)
+    descargar(id_archivos)
+    ubicacion = pedir_ubicacion()
 
 main()
