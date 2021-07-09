@@ -3,7 +3,7 @@ import io
 import googleapiclient.http
 from service_drive import obtener_servicio
 
-def pedir_nombre_archivo(servicio, archivos_en_drive) -> str:
+def pedir_nombre_archivos(servicio, archivos_en_drive) -> str:
     """
     """
     
@@ -22,7 +22,7 @@ def pedir_ubicacion():
 
     return ubicacion
 
-def obtener_id(servicio, nombre_archivo : str) -> str:
+def obtener_id(nombre_archivo : str) -> str:
     """
     PRE: servicio debe ser un objeto de tipo Resource con los datos del usuario
     y nombre_archivo una cadena con el nombre del archivo o carpeta que desea
@@ -34,26 +34,34 @@ def obtener_id(servicio, nombre_archivo : str) -> str:
 
     return id_archivos
 
-def descargar(id_archivos):
+def descargar(id_archivos, servicio):
     """
     """
 
     fh = io.FileIO(id_archivos, 'r')
-    descargar = googleapiclient.http.MediaIoBaseDownload(fh, )
+    descargar = googleapiclient.http.MediaIoBaseDownload(fh, servicio)
     terminado = False
 
     while terminado is False:
         status, terminado = descargar.next_chunk()
         print("Download %d%%." % int(status.progress() * 100))
 
+def guardar_en_binario(ubicacion, archivo) -> None:
+    """
+    """
+
+    pass
+
 def main() -> None:
 
     servicio = obtener_servicio()
     archivos_en_drive = servicio.files().list().execute()
 
-    id_archivos = pedir_nombre_archivo(servicio, archivos_en_drive)
+    archivos = pedir_nombre_archivos(servicio, archivos_en_drive)
+    id_archivos = obtener_id(archivos)
     solicitud = servicio.files().get_media(fileId=id_archivos)
-    descargar(id_archivos)
+    descargar(id_archivos, servicio)
     ubicacion = pedir_ubicacion()
+    guardar_en_binario(ubicacion, id_archivos)
 
 main()
