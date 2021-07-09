@@ -1,7 +1,10 @@
 import platform
 
-sistema_actual = platform.system()
 
-print(f"Estamos en {sistema_actual}")
 def detectar_sistema() ->str:
-    sistema_actual =
+    SO = platform.system()
+    return SO
+
+detectar_sistema()
+
+# url del repo: https://github.com/IglesiasT/TP2.git
