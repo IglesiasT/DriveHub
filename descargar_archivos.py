@@ -31,7 +31,6 @@ def obtener_id(servicio, nombre_archivo : str) -> str:
     """
 
     id_archivos = ''
-    solicitud = servicio.files().get_media(fileId=id_archivos)
 
     return id_archivos
 
@@ -40,7 +39,7 @@ def descargar(id_archivos):
     """
 
     fh = io.FileIO(id_archivos, 'r')
-    descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud)
+    descargar = googleapiclient.http.MediaIoBaseDownload(fh, )
     terminado = False
 
     while terminado is False:
@@ -53,6 +52,7 @@ def main() -> None:
     archivos_en_drive = servicio.files().list().execute()
 
     id_archivos = pedir_nombre_archivo(servicio, archivos_en_drive)
+    solicitud = servicio.files().get_media(fileId=id_archivos)
     descargar(id_archivos)
     ubicacion = pedir_ubicacion()
 
