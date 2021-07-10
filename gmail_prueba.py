@@ -49,5 +49,5 @@ poema = resultado["payload"]["parts"][1]["filename"]
 print(poema)
 mensaje_id = resultado["payload"]["headers"][18]["value"]
 
-resultado_2 = servicio.users().messages().get(userId = 'me', messageId = mensaje_id, Id = identificados[0] ).execute()
-print(resultado_2)
+#resultado_2 = servicio.users().messages().get(userId = 'me', messageId = mensaje_id, Id = identificados[0] ).execute()
+#print(resultado_2)
