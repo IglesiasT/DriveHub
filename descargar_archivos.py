@@ -27,15 +27,19 @@ def pedir_ubicacion():
 
     return ubicacion
 
-def obtener_id(nombre_archivo : str) -> str:
+def obtener_id(archivo_deseado : str) -> str:
     """
-    PRE: servicio debe ser un objeto de tipo Resource con los datos del usuario
-    y nombre_archivo una cadena con el nombre del archivo o carpeta que desea
+    PRE: Recibe una cadena con el nombre del archivo o carpeta que desea
     descargar
     POST: Devuelve una cadena con el id del archivo indicado
     """
 
-    return SOLICITUD
+    try:
+        for archivo in ARCHIVOS_EN_DRIVE:
+            if archivo['name'].capitalize() == archivo_deseado.capitalize():
+                return archivo['id']
+    except:
+        print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
 
 def descargar(id_archivos):
     """
@@ -59,16 +63,17 @@ def guardar_en_binario(ubicacion, archivo) -> None:
 def main() -> None:
     
     #Pedido y validación de archivo
-    archivos_deseado = input('Indica el nombre del archivo o carpeta a descargar: ')
+    archivo_deseado = input('Indica el nombre del archivo o carpeta a descargar: ')
     
-    while not archivo_valido(archivos_deseado):
+    while not archivo_valido(archivo_deseado):
         archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
 
-    id_archivos = obtener_id('archivos_deseados')
+
+    id_archivo = obtener_id(archivo_deseado)
     
-    descargar(id_archivos)
+    descargar(id_archivo)
 
     ubicacion = pedir_ubicacion()
-    guardar_en_binario(ubicacion, id_archivos)
+    guardar_en_binario(ubicacion, id_archivo)
 
 main()
