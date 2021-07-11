@@ -3,13 +3,19 @@ import io
 import googleapiclient.http
 from service_drive import obtener_servicio
 
-def pedir_nombre_archivos(servicio, archivos_en_drive) -> str:
+SERVICIO = obtener_servicio()
+ARCHIVOS_EN_DRIVE = SERVICIO.files().list().execute()
+
+def pedir_nombre_archivos() -> str:
     """
+    Solicita al usuario el nombre del archivo que desea descargar de su Drive
+    lo valida y si existe devuelve una cadena con el nombre del mismo,
+    sino vuelve a pedir hasta que sea valido
     """
     
     archivo_deseado = input('Indica el nombre del/los archivo/s a descargar: ')
 
-    while not archivo_deseado in archivos_en_drive:
+    while not archivo_deseado in ARCHIVOS_EN_DRIVE: ##esta comparando str con files
         archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
 
     return archivo_deseado
@@ -34,12 +40,12 @@ def obtener_id(nombre_archivo : str) -> str:
 
     return id_archivos
 
-def descargar(id_archivos, servicio):
+def descargar(id_archivos):
     """
     """
 
     fh = io.FileIO(id_archivos, 'r')
-    descargar = googleapiclient.http.MediaIoBaseDownload(fh, servicio)
+    descargar = googleapiclient.http.MediaIoBaseDownload(fh, SERVICIO)
     terminado = False
 
     while terminado is False:
@@ -54,13 +60,11 @@ def guardar_en_binario(ubicacion, archivo) -> None:
 
 def main() -> None:
 
-    servicio = obtener_servicio()
-    archivos_en_drive = servicio.files().list().execute()
+    archivos_deseados = pedir_nombre_archivos(SERVICIO, archivos_en_drive)
+    id_archivos = obtener_id(archivos_deseados)
+    solicitud = SERVICIO.files().get_media(fileId=id_archivos)
+    descargar(id_archivos, SERVICIO)
 
-    archivos = pedir_nombre_archivos(servicio, archivos_en_drive)
-    id_archivos = obtener_id(archivos)
-    solicitud = servicio.files().get_media(fileId=id_archivos)
-    descargar(id_archivos, servicio)
     ubicacion = pedir_ubicacion()
     guardar_en_binario(ubicacion, id_archivos)
 
