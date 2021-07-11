@@ -1,10 +1,10 @@
-import os
 import io
 import googleapiclient.http
 from service_drive import obtener_servicio
 
 SERVICIO = obtener_servicio()
-ARCHIVOS_EN_DRIVE = SERVICIO.files().list().execute()
+SOLICITUD = SERVICIO.files().list().execute()
+ARCHIVOS_EN_DRIVE = SOLICITUD.get('files', [])
 
 def pedir_nombre_archivos() -> str:
     """
@@ -15,10 +15,11 @@ def pedir_nombre_archivos() -> str:
     
     archivo_deseado = input('Indica el nombre del/los archivo/s a descargar: ')
 
-    while not archivo_deseado in ARCHIVOS_EN_DRIVE:
-        archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
-
-    return archivo_deseado
+    for archivo in ARCHIVOS_EN_DRIVE:
+        if archivo['name'] == archivo_deseado:
+            return archivo_deseado
+    
+    archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
 
 def pedir_ubicacion():
     """
@@ -36,9 +37,7 @@ def obtener_id(nombre_archivo : str) -> str:
     POST: Devuelve una cadena con el id del archivo indicado
     """
 
-    id_archivos = ''
-
-    return id_archivos
+    return SOLICITUD
 
 def descargar(id_archivos):
     """
@@ -60,9 +59,9 @@ def guardar_en_binario(ubicacion, archivo) -> None:
     pass
 
 def main() -> None:
-
-    archivos_deseados = pedir_nombre_archivos()
-    id_archivos = obtener_id(archivos_deseados)
+    
+    #archivos_deseados = pedir_nombre_archivos()
+    id_archivos = obtener_id('archivos_deseados')
     
     descargar(id_archivos)
 
