@@ -6,20 +6,18 @@ SERVICIO = obtener_servicio()
 SOLICITUD = SERVICIO.files().list().execute()
 ARCHIVOS_EN_DRIVE = SOLICITUD.get('files', [])
 
-def pedir_nombre_archivos() -> str:
+def archivo_valido(archivo_deseado : str) -> bool:
     """
-    Solicita al usuario el nombre del archivo que desea descargar de su Drive
-    lo valida y si existe devuelve una cadena con el nombre del mismo,
-    sino vuelve a pedir hasta que sea valido
+    PRE: Recibe una cadena con el nombre del archivo o carpeta que el usuario
+    desea descargar de Drive a su equipo.
+    POST: Devuelve en booleano si el archivo o carpeta existe en su Drive
     """
-    
-    archivo_deseado = input('Indica el nombre del/los archivo/s a descargar: ')
 
     for archivo in ARCHIVOS_EN_DRIVE:
-        if archivo['name'] == archivo_deseado:
-            return archivo_deseado
+        if archivo['name'].capitalize() == archivo_deseado.capitalize():
+            return True
     
-    archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
+    return False 
 
 def pedir_ubicacion():
     """
@@ -60,7 +58,12 @@ def guardar_en_binario(ubicacion, archivo) -> None:
 
 def main() -> None:
     
-    #archivos_deseados = pedir_nombre_archivos()
+    #Pedido y validación de archivo
+    archivos_deseado = input('Indica el nombre del archivo o carpeta a descargar: ')
+    
+    while not archivo_valido(archivos_deseado):
+        archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
+
     id_archivos = obtener_id('archivos_deseados')
     
     descargar(id_archivos)
