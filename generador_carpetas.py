@@ -8,10 +8,6 @@ import os
 OS = platform.system()
 CADENA = "\ "
 BARRA = CADENA[0]
-matcheo = {"Guido_Costa": {"107789_Ebbes": True,
-                           "110389_Puccar": False,
-                           "108923_Iglesias": True},
-           "Leonel_Chaves": {"107876_Ianello": True}}
 
 
 def ruta_desk_w(BARRA: str) -> str:
@@ -37,12 +33,22 @@ def generador_ruta(sistema_actual: str, BARRA: str) -> str:
     return ruta
 
 
+def remover_comillas(palabra: str) -> str:
+    salida = ""
+    for caracter in palabra:
+        if caracter != '"':
+            salida += caracter
+    return salida
+
+
 def info_matcheo(padron: str, matcheo: str) -> str:
     with open(matcheo, "r") as archivo:
         for linea in archivo:
+            linea = linea.rstrip()
             if padron in linea:
                 data_match = linea.split(",")
                 profe = data_match[1]
+                profe = remover_comillas(profe)
     return profe
 
 
@@ -50,10 +56,10 @@ def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
     archivo_matcheo = "matcheo.csv"
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
-    path = ruta_sistema + BARRA
+    path = ruta_sistema
     if not os.path.isdir(f"{path}Evaluaciones"):
         os.mkdir(f"{path}Evaluaciones")
-    path += ("Evaluaciones" + BARRA)
+    path = path + "Evaluaciones" + BARRA
     nombre_alumno = " - " + info_alumno[1]
     if os.path.isdir(path + docente):
         os.mkdir(path + docente + BARRA + padron_alumno + nombre_alumno)
@@ -66,6 +72,9 @@ def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
 # url del repo: https://github.com/IglesiasT/TP2.git
 def main() -> None:
     ruta = generador_ruta(OS, BARRA)
-    crear_carpetas(matcheo, ruta)
+    base_alumnos = [["107123", "Ebbes_Gonzalo"], ["107515", "Nicolas Puccar"]]
+    for elem in base_alumnos:
+        info_alumno = elem
+        crear_carpetas(info_alumno, ruta)
 
 main()
