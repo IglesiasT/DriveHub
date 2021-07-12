@@ -54,6 +54,9 @@ def descargar_archivo(id_archivo : str, ruta : str):
         status, terminado = descargar.next_chunk()
         print("Download %d%%." % int(status.progress() * 100))
 
+    with open(ruta, 'wb') as f:
+        f.write(fh.read())
+
 def guardar_en_binario(ubicacion, archivo) -> None:
     """
     """
