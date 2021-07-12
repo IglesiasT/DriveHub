@@ -41,13 +41,13 @@ def obtener_id(archivo_deseado : str) -> str:
     except:
         print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
 
-def descargar(id_archivos):
+def descargar_archivo(id_archivo : str, ruta : str):
     """
     """
 
-    solicitud = SERVICIO.files().get_media(fileId=id_archivos)
-    fh = io.FileIO(id_archivos, 'r')
-    descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud)
+    solicitud_descarga = SERVICIO.files().get_media(fileId=id_archivo)
+    fh = io.BytesIO()
+    descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud_descarga)
     terminado = False
 
     while terminado is False:
@@ -68,12 +68,10 @@ def main() -> None:
     while not archivo_valido(archivo_deseado):
         archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
 
-
     id_archivo = obtener_id(archivo_deseado)
-    
-    descargar(id_archivo)
 
     ubicacion = pedir_ubicacion()
+    descargar_archivo(id_archivo)
     guardar_en_binario(ubicacion, id_archivo)
 
 main()
