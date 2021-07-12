@@ -25,6 +25,18 @@ from email.mime.text import MIMEText
 
 # ["123654 " , Nicolas Puccar]
 
+def evaluar_alumnos():
+    cursantes = "alumnos_profesores.csv"
+
+    datos = list()
+    with open(cursantes, newline='', encoding="UTF-8") as archivo_csv:
+        csv_reader = csv.reader(archivo_csv, delimiter=',')
+        next(csv_reader)
+        for row in csv_reader:
+            datos.append(row)
+
+    return datos
+
 
 def detectar_gmails(recibidos):
 
@@ -56,8 +68,8 @@ def evaluar_padron(padron : str, alumnos : dict):
 
     flag = False
 
-    for corrector in alumnos:
-        if padron in alumnos[corrector].keys():
+    for i in range(len(alumnos)):
+        if padron == alumnos[i][0]:
             flag = True
         
     return flag
@@ -113,7 +125,7 @@ def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : 
 
 def main():
     
-    alumnos = {  "leo" :  {  "107635": "nicolas puccar", "168524" : "alejandro fantin" }  }  
+    alumnos = evaluar_alumnos()  
 
     servicio = gmail.obtener_servicio()
 
