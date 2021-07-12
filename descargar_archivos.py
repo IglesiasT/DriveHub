@@ -41,8 +41,12 @@ def obtener_id(archivo_deseado : str) -> str:
     except:
         print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
 
-def descargar_archivo(id_archivo : str, ruta : str):
+def descargar_archivo(id_archivo : str, ruta : str) -> None:
     """
+    PRE: Recibe una cadena con el id del archivo a descargar y la ruta donde 
+    desea guardar el archivo con el nombre y su extension al final de la misma
+    POST: Escribe un archivo de tipo binario en la ruta indicada con el nombre
+    indicado al final de la misma
     """
 
     solicitud_descarga = SERVICIO.files().get_media(fileId=id_archivo)
