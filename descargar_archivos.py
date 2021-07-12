@@ -26,7 +26,7 @@ def pedir_ruta() -> str:
     POST: Devuelve una cadena con la ruta deseada
     """
 
-    print('¿Dónde deseas guardar el archivo')
+    print('¿Dónde deseas guardar el archivo o carpeta?')
     ruta = input('Indica la ruta: ')
 
     while not (os.path.exists(ruta) or os.path.isdir(ruta)):
@@ -70,7 +70,7 @@ def descargar_archivo(id_archivo : str, ruta : str) -> None:
 
 def main() -> None:
     
-    #Pedido y validación de archivo
+    #Pedido y validación de archivo (Drive reconoce las carpetas como archivos)
     archivo_deseado = input('Indica el nombre del archivo o carpeta a descargar: ')
     
     while not archivo_valido(archivo_deseado):
