@@ -1,4 +1,4 @@
-import io
+import io, os
 import googleapiclient.http
 from service_drive import obtener_servicio
 
@@ -19,11 +19,18 @@ def archivo_valido(archivo_deseado : str) -> bool:
     
     return False 
 
-def pedir_ruta():
+def pedir_ruta() -> str:
     """
+    Pide al usuario la ruta donde desea guardar el archivo
+    hasta que ingrese una válida
+    POST: Devuelve una cadena con la ruta deseada
     """
 
-    ruta = input('¿Dónde deseas guardar el archivo')
+    print('¿Dónde deseas guardar el archivo')
+    ruta = input('Indica la ruta: ')
+
+    while not (os.path.exists(ruta) or os.path.isdir(ruta)):
+        ruta = input('Ruta inválida. Vuelve a intentarlo')
 
     return ruta
 
@@ -71,7 +78,8 @@ def main() -> None:
 
     id_archivo = obtener_id(archivo_deseado)
 
+    #Pedido y validación de la ruta deseada para el archivo a descargar
     ruta = pedir_ruta()
-    descargar_archivo(id_archivo)
+    descargar_archivo(id_archivo, os.path.join(ruta, archivo_deseado))
 
 main()
