@@ -19,13 +19,13 @@ def archivo_valido(archivo_deseado : str) -> bool:
     
     return False 
 
-def pedir_ubicacion():
+def pedir_ruta():
     """
     """
 
-    ubicacion = input('¿Dónde deseas guardar el archivo')
+    ruta = input('¿Dónde deseas guardar el archivo')
 
-    return ubicacion
+    return ruta
 
 def obtener_id(archivo_deseado : str) -> str:
     """
@@ -71,7 +71,7 @@ def main() -> None:
 
     id_archivo = obtener_id(archivo_deseado)
 
-    ubicacion = pedir_ubicacion()
+    ruta = pedir_ruta()
     descargar_archivo(id_archivo)
 
 main()
