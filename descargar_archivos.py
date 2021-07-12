@@ -61,12 +61,6 @@ def descargar_archivo(id_archivo : str, ruta : str) -> None:
     with open(ruta, 'wb') as f:
         f.write(fh.read())
 
-def guardar_en_binario(ubicacion, archivo) -> None:
-    """
-    """
-
-    pass
-
 def main() -> None:
     
     #Pedido y validación de archivo
@@ -79,6 +73,5 @@ def main() -> None:
 
     ubicacion = pedir_ubicacion()
     descargar_archivo(id_archivo)
-    guardar_en_binario(ubicacion, id_archivo)
 
 main()
