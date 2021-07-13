@@ -26,7 +26,7 @@ def verificar_zip(ruta: str)->bool:
 
 def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     contraseña = None
-    archivo_zip = zipfile.ZipFile(ruta_zip, "r")
+    archivo_zip = zipfile.ZipFile(ruta_zip, "rb")
     try:
         print(archivo_zip.namelist())
         archivo_zip.extractall(pwd=contraseña, path=ruta_extraccion)
