@@ -4,10 +4,16 @@ import os
 # Recibo estructura del estilo:
 # CSV del matcheo, cada linea:   PADRON, Apellido_profe
 # Info_alumno sale del mail: [ PADRON , APELLIDO NOMBRE , <direccion.zip>]
+# [ PADRON , APELLIDO NOMBRE , <direccion.zip>, direccion_carpeta_alumno]
 
 OS = platform.system()
 CADENA = "\ "
 BARRA = CADENA[0]
+
+
+def generador_carpeta_zip(BARRA: str) -> None:
+    ruta = ruta_desk_w(BARRA)
+    os.mkdir(f"{ruta}descargas_zip")
 
 
 def ruta_desk_w(BARRA: str) -> str:
@@ -52,29 +58,49 @@ def info_matcheo(padron: str, matcheo: str) -> str:
     return profe
 
 
+def carpeta_evaluaciones(ruta_desktop: str) -> str:
+    if not os.path.isdir(f"{ruta_desktop}Evaluaciones"):
+        os.mkdir(f"{ruta_desktop}Evaluaciones")
+    path = ruta_desktop + "Evaluaciones" + BARRA
+    return path
+
+
+def carpeta_docente(path: str, docente: str) -> str:
+    if not os.path.isdir(path + docente):
+        os.mkdir(path + docente)
+    path = path + docente + BARRA
+    return path
+
+
+def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
+    if not os.path.isdir(path + padron_alumno + alumno):
+        os.mkdir(padron_alumno + alumno)
+    path = path + padron_alumno + alumno
+    return path
+
+
 def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
-    archivo_matcheo = "matcheo.csv"
+    ubicacaion_zip = info_alumno[2]
+    archivo_matcheo = "matcheo.csv"        # Hay que actualizar el nombre
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
-    path = ruta_sistema
-    if not os.path.isdir(f"{path}Evaluaciones"):
-        os.mkdir(f"{path}Evaluaciones")
-    path = path + "Evaluaciones" + BARRA
-    nombre_alumno = " - " + info_alumno[1]
-    if os.path.isdir(path + docente):
-        os.mkdir(path + docente + BARRA + padron_alumno + nombre_alumno)
-    else:
-        os.mkdir(path + docente)
-        os.mkdir(path + docente + BARRA + padron_alumno + nombre_alumno)
+    nombre_alumno = "_" + info_alumno[1].replace(" ", "_")
+    path = carpeta_evaluaciones(ruta_sistema)
+    path = carpeta_docente(path, docente)
+    path = carpeta_alumno(path, nombre_alumno, padron_alumno)
+    # descomprimir_zip(ubicacion_zip, path)
+
 
 
 
 # url del repo: https://github.com/IglesiasT/TP2.git
 def main() -> None:
     ruta = generador_ruta(OS, BARRA)
-    base_alumnos = [["107123", "Ebbes_Gonzalo"], ["107515", "Nicolas Puccar"]]
+    base_alumnos = [["107123", "Ebbes_Gonzalo", "<direccion.zip>"],
+                   ["107515", "Nicolas Puccar", "<direccion.zip>"]]
     for elem in base_alumnos:
         info_alumno = elem
         crear_carpetas(info_alumno, ruta)
+    generador_carpeta_zip(BARRA)
 
 main()
