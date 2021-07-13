@@ -8,7 +8,7 @@ def verificar_zip(ruta: str)->bool:
     lista_ruta = ruta.split(BARRA)
     espacio_archivo = (len(lista_ruta)-1)
     lista_archivo = (lista_ruta[espacio_archivo].replace(".zip",""))
-    lista_archivo = lista_archivo.split("_")
+    lista_archivo = lista_archivo.split(" - ")
     padron = lista_archivo[0]
     nom_apellido = lista_archivo[1] 
 
@@ -18,7 +18,7 @@ def verificar_zip(ruta: str)->bool:
         for row in csv_reader:
             padron_csv = row[0]
             nombre_apellido_csv = row[1]
-            if ((padron in padron_csv) and (nom_apellido in nombre_apellido_csv)):
+            if ((padron in padron_csv) and (nom_apellido == nombre_apellido_csv)):
                 existe = True
          
     return existe
@@ -38,7 +38,7 @@ def main()->None:
     "",""
     CADENA = "\ "
     BARRA = CADENA[0]
-    ruta = "E:"+BARRA+"UBA"+BARRA+"Fiuba"+BARRA+"2021"+BARRA+"107123_Brian_Cespedes.zip"
+    ruta = "E:"+BARRA+"UBA"+BARRA+"Fiuba"+BARRA+"2021"+BARRA+"107123 - Cespedes, Brian.zip"
     ruta2 ="E:"+BARRA+"UBA"+BARRA+"Fiuba"+BARRA+"2021"
     #descomprimir_archivo(ruta, ruta2)
     bol = verificar_zip(ruta)
