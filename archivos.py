@@ -10,7 +10,7 @@ def verificar_zip(ruta: str)->bool:
     lista_archivo = (lista_ruta[espacio_archivo].replace(".zip",""))
     lista_archivo = lista_archivo.split("_")
     padron = lista_archivo[0]
-    nom_apellido = lista_archivo[1] + "_" +lista_archivo[2]
+    nom_apellido = lista_archivo[1] 
 
     with open("alumnos.csv", mode ='r', newline='', encoding="UTF-8") as alumnos_csv:
         csv_reader = csv.reader(alumnos_csv, delimiter=',')
