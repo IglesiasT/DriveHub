@@ -1,0 +1,6 @@
+*.json
+__pycache__/
+archivos/
+nueva carpeta (2)/
+*.csv
+
