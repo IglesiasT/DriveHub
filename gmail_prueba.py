@@ -42,7 +42,7 @@ def detectar_gmails(recibidos):
 
     identificados = []
 
-    labels = recibidos.get('messages', [])
+    labels = recibidos.get('messages', ["INBOX"])
 
     if not labels:
         print('No labels found.')
@@ -87,12 +87,39 @@ def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool):
     mimeMessage['subject'] = nombre
     mimeMessage.attach(MIMEText(emailMsg, 'plain'))
     raw_string = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
-    message = servicio.users().messages().send(userId='me', body={'raw': raw_string}).execute()
+    #message = servicio.users().messages().send(userId='me', body={'raw': raw_string}).execute()
 
 def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict):
 
     flag = evaluar_padron(padron,alumnos)
     if flag == True:
+
+        # archivos = generar_carpeta() funcion para generar una carpeta
+
+        # CADENA = "\ "
+
+        # BARRA = CADENA[0]
+
+        # ruta_zip = archivos + BARRA + "123654 - Puccar, Nicolas.zip" 
+        
+        # funcion verificar_zip( ruta_zip ) devuelve booleano
+
+        """
+        if bool == True:
+
+            pasar cosas a gonza y enviar mensaje de confirmacion
+
+            lista.append( ruta_zip ) 
+
+            [ 123654 , puccar nicolas , <direccion>( ruta_zip)]
+
+        if bool == False:
+
+            pasar mensaje de que lo hiciste mal pibe 
+
+        """
+
+        print("el mail es correcto")
         generar_mensaje(correo_recibido,servicio,flag)
         codigo = generar_codigo(servicio, correo_recibido, recibidos)
         descripcion = correo_recibido["payload"]["parts"][1]["filename"]
@@ -117,19 +144,25 @@ def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : 
         prueba = lista[1]
     except:
         None
+        print("no sirve")
     else:
         codeo = lista[0]
         padron = codeo.strip()
-
-        guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos)
-
+        if padron.isnumeric():
+            guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos)
+        else:
+            print("no sirve tampoco")
 def main():
     
     alumnos = evaluar_alumnos()  
 
     servicio = gmail.obtener_servicio()
 
-    recibidos = servicio.users().messages().list(userId = 'me',q="after:1624987804 before:1626030000").execute()
+    #https://gmail.googleapis.com/gmail/v1/users/{userId}/labels
+
+    #labels = servicio.users().labels().get(userId = 'me', id = "INBOX").execute()
+
+    recibidos = servicio.users().messages().list(userId = 'me', labelIds = "INBOX").execute()#,q = "after : 1624987804 before : 1626030000" 
 
     identificados = detectar_gmails(recibidos)
 
