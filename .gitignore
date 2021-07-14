@@ -1,0 +1,10 @@
+
+*.json
+__pycache__/
+archivos/
+nueva carpeta (2)/
+*.csv
+/TP2/
+/Cosas_de_apoyo/
+/.idea/
+
