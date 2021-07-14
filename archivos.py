@@ -14,7 +14,7 @@ def verificar_zip(ruta: str)->bool:
 
     with open("alumnos.csv", mode ='r', newline='', encoding="UTF-8") as alumnos_csv:
         csv_reader = csv.reader(alumnos_csv, delimiter=',')
-	    #next(csv_reader) #Evitamos leer el header
+        next(csv_reader)
         for row in csv_reader:
             padron_csv = row[0]
             nombre_apellido_csv = row[1]
@@ -26,7 +26,7 @@ def verificar_zip(ruta: str)->bool:
 
 def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     contraseña = None
-    archivo_zip = zipfile.ZipFile(ruta_zip, "r")
+    archivo_zip = zipfile.ZipFile(ruta_zip, "rb")
     try:
         print(archivo_zip.namelist())
         archivo_zip.extractall(pwd=contraseña, path=ruta_extraccion)
