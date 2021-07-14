@@ -1,2 +1,2 @@
-client_secret.json
-token_drive.json
+*.json
+__pycache__/
