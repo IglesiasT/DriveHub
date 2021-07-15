@@ -1,3 +1,4 @@
+from generador_carpetas import generador_carpeta
 import io, os
 import googleapiclient.http
 from service_drive import obtener_servicio
@@ -48,7 +49,7 @@ def obtener_id(archivo_deseado : str) -> str:
     except:
         print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
 
-def descargar_archivo(id_archivo : str, ruta : str) -> None:
+def descargar_archivo(id_archivo : str) -> None:
     """
     PRE: Recibe una cadena con el id del archivo a descargar y la ruta donde 
     desea guardar el archivo con el nombre y su extension al final de la misma
@@ -56,6 +57,7 @@ def descargar_archivo(id_archivo : str, ruta : str) -> None:
     indicado al final de la misma
     """
 
+    ruta = ''
     solicitud_descarga = SERVICIO.files().get_media(fileId=id_archivo)
     fh = io.BytesIO()
     descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud_descarga)
