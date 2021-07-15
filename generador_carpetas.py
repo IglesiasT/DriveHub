@@ -23,8 +23,13 @@ def generador_carpeta(nombre_carpeta: str) -> None:
         try:
             os.mkdir(ruta + nombre_carpeta)
         except IOError:
-            nombre_carpeta = input("El nombre ingresado contiene caracteres invalidos,"
-                                   " por favor intente denuevo: ")
+            if os.path.isdir(ruta + nombre_carpeta):
+                nombre_carpeta = input("La carpeta ya existe, ingrese otro nombre o Exit para cancelar: ")
+                if nombre_carpeta == "Exit":
+                    pidiendo_nombre = False
+            else:
+                nombre_carpeta = input("El nombre ingresado contiene caracteres invalidos,"
+                                       " por favor intente denuevo: ")
         else:
             print("La carpeta se ha creado correctamente")
             pidiendo_nombre = False
