@@ -1,5 +1,6 @@
 import platform
 import os
+import archivos
 
 # Recibo estructura del estilo:
 # CSV del matcheo, cada linea:   PADRON, Apellido_profe
@@ -103,7 +104,7 @@ def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
     """
     Aclaraciones extra de la funcion, el path se va actualizando a medida que se crean las carpetas
     """
-    ubicacaion_zip = info_alumno[2]
+    ubicacion_zip = info_alumno[2]
     archivo_matcheo = "alumnos_profesores.csv"
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
@@ -111,4 +112,4 @@ def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
     path = carpeta_evaluaciones(ruta_sistema)
     path = carpeta_docente(path, docente)
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
-    # descomprimir_zip(ubicacion_zip, path)
+    archivo.descomprimir_archivo(ubicacion_zip, path)
