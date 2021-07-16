@@ -20,21 +20,6 @@ def archivo_valido(archivo_deseado : str) -> bool:
     
     return False 
 
-def pedir_ruta() -> str:
-    """
-    Pide al usuario la ruta donde desea guardar el archivo
-    hasta que ingrese una válida
-    POST: Devuelve una cadena con la ruta deseada
-    """
-
-    print('¿Dónde deseas guardar el archivo o carpeta?')
-    ruta = input('Indica la ruta: ')
-
-    while not (os.path.exists(ruta) or os.path.isdir(ruta)):
-        ruta = input('Ruta inválida. Vuelve a intentarlo')
-
-    return ruta
-
 def obtener_id(archivo_deseado : str) -> str:
     """
     PRE: Recibe una cadena con el nombre del archivo o carpeta que desea
@@ -84,8 +69,6 @@ def main() -> None:
 
     id_archivo = obtener_id(archivo_deseado)
 
-    #Pedido y validación de la ruta deseada para el archivo a descargar
-    ruta = pedir_ruta()
-    descargar_archivo(id_archivo, os.path.join(ruta, archivo_deseado))
+    descargar_archivo(id_archivo, archivo_deseado)
 
 main()
