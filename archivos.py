@@ -1,4 +1,3 @@
-from prueba2 import verificacion_ruta
 import zipfile
 import csv
 def verificar_zip(ruta: str)->bool:
