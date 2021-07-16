@@ -1,4 +1,4 @@
-from generador_carpetas import generador_carpeta
+from generador_carpetas import generador_carpeta, ruta_desk_w
 import io, os
 import googleapiclient.http
 from service_drive import obtener_servicio
@@ -56,8 +56,12 @@ def descargar_archivo(id_archivo : str) -> None:
     POST: Escribe un archivo de tipo binario en la ruta indicada con el nombre
     indicado al final de la misma
     """
+    #Localización de la descarga
+    nombre_carpeta = 'Descargas Drive'
+    generador_carpeta(nombre_carpeta)    #Crea carpeta en escritorio donde voy a guardar el archivo
+    ruta = ruta_desk_w() + nombre_carpeta
 
-    ruta = ''
+    #Inicialización de la descarga
     solicitud_descarga = SERVICIO.files().get_media(fileId=id_archivo)
     fh = io.BytesIO()
     descargar = googleapiclient.http.MediaIoBaseDownload(fh, solicitud_descarga)
@@ -67,7 +71,7 @@ def descargar_archivo(id_archivo : str) -> None:
         status, terminado = descargar.next_chunk()
         print("Download %d%%." % int(status.progress() * 100))
 
-    with open(ruta, 'wb') as f:
+    with open(ruta, 'wb') as f: ####ruta + nombre_archivo
         f.write(fh.read())
 
 def main() -> None:
