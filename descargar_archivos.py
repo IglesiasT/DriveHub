@@ -51,10 +51,9 @@ def obtener_id(archivo_deseado : str) -> str:
 
 def descargar_archivo(id_archivo : str, nombre_archivo : str) -> None:
     """
-    PRE: Recibe una cadena con el id del archivo a descargar y la ruta donde 
-    desea guardar el archivo con el nombre y su extension al final de la misma
-    POST: Escribe un archivo de tipo binario en la ruta indicada con el nombre
-    indicado al final de la misma
+    PRE: Recibe una cadena con el id del archivo a descargar y su nombre
+    POST: Crea una carpeta llamada Descargas Drive en el escritorio y guarda
+    el archivo dentro de la misma
     """
     #Localización de la descarga
     nombre_carpeta = 'Descargas Drive'
