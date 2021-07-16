@@ -7,20 +7,25 @@ SERVICIO = obtener_servicio()
 SOLICITUD = SERVICIO.files().list().execute()
 ARCHIVOS_EN_DRIVE = SOLICITUD.get('files', [])
 
-def archivo_valido(archivo_deseado : str) -> bool:
+def pedir_nombre_archivo() -> str:
     """
     PRE: Recibe una cadena con el nombre del archivo o carpeta que el usuario
     desea descargar de Drive a su equipo.
     POST: Devuelve en booleano si el archivo o carpeta existe en su Drive
     """
 
+    nombre_archivo = input('Indica el nombre del archivo o carpeta a descargar: ')
+    
+    while not archivo_valido(nombre_archivo):
+        nombre_archivo = input('Archivo inexistente. Vuelve a intentar\n')
+
     for archivo in ARCHIVOS_EN_DRIVE:
-        if archivo['name'].capitalize() == archivo_deseado.capitalize():
+        if archivo['name'].capitalize() == nombre_archivo.capitalize():
             return True
     
     return False 
 
-def obtener_id(archivo_deseado : str) -> str:
+def obtener_id(nombre_archivo : str) -> str:
     """
     PRE: Recibe una cadena con el nombre del archivo o carpeta que desea
     descargar
@@ -29,7 +34,7 @@ def obtener_id(archivo_deseado : str) -> str:
 
     try:
         for archivo in ARCHIVOS_EN_DRIVE:
-            if archivo['name'].capitalize() == archivo_deseado.capitalize():
+            if archivo['name'].capitalize() == nombre_archivo.capitalize():
                 return archivo['id']
     except:
         print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
@@ -62,13 +67,10 @@ def descargar_archivo(id_archivo : str, nombre_archivo : str) -> None:
 def main() -> None:
     
     #Pedido y validación de archivo (Drive reconoce las carpetas como archivos)
-    archivo_deseado = input('Indica el nombre del archivo o carpeta a descargar: ')
-    
-    while not archivo_valido(archivo_deseado):
-        archivo_deseado = input('Archivo inexistente. Vuelve a intentar\n')
+    nombre_archivo = pedir_nombre_archivo()
 
-    id_archivo = obtener_id(archivo_deseado)
+    id_archivo = obtener_id(nombre_archivo)
 
-    descargar_archivo(id_archivo, archivo_deseado)
+    descargar_archivo(id_archivo, nombre_archivo)
 
 main()
