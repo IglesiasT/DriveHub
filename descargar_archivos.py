@@ -15,16 +15,26 @@ def pedir_nombre_archivo() -> str:
     """
 
     nombre_archivo = input('Indica el nombre del archivo o carpeta a descargar: ')
+
+    while not nombre_archivo_valido(nombre_archivo):
+        nombre_archivo = input('Archivo inexistente. Vuelve a intentar\n')
+
+    return nombre_archivo
+
+def nombre_archivo_valido(nombre_archivo : str) -> bool:
+    """
+    PRE: Recibe una cadena con el nombre del archivo a verificar
+    POST: Devuelve en booleano si el nombre del archivo se encuentra en los archivos
+    de Drive del usuario
+    """
+
     archivo_valido = False
-    
+
     for archivo in ARCHIVOS_EN_DRIVE:
         if archivo['name'].capitalize() == nombre_archivo.capitalize():
             archivo_valido = True
 
-    while not archivo_valido:
-        nombre_archivo = input('Archivo inexistente. Vuelve a intentar\n')
-
-    return nombre_archivo
+    return archivo_valido
 
 def obtener_id(nombre_archivo : str) -> str:
     """
