@@ -1,4 +1,3 @@
-from preuba2 import verificacion_ruta
 import zipfile
 import csv
 def verificar_zip(ruta: str)->bool:
@@ -33,15 +32,3 @@ def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     except:
         pass
     archivo_zip.close
-
-def main()->None:
-    "",""
-    CADENA = "\ "
-    BARRA = CADENA[0]
-    ruta = "E:"+BARRA+"UBA"+BARRA+"Fiuba"+BARRA+"2021"+BARRA+"107123 - Cespedes, Brian.zip"
-    ruta2 ="E:"+BARRA+"UBA"+BARRA+"Fiuba"+BARRA+"2021"
-    #descomprimir_archivo(ruta, ruta2)
-    bol = verificar_zip(ruta)
-    print(bol)
-
-main()
