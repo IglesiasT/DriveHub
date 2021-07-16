@@ -49,7 +49,7 @@ def obtener_id(archivo_deseado : str) -> str:
     except:
         print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
 
-def descargar_archivo(id_archivo : str) -> None:
+def descargar_archivo(id_archivo : str, nombre_archivo : str) -> None:
     """
     PRE: Recibe una cadena con el id del archivo a descargar y la ruta donde 
     desea guardar el archivo con el nombre y su extension al final de la misma
@@ -71,7 +71,8 @@ def descargar_archivo(id_archivo : str) -> None:
         status, terminado = descargar.next_chunk()
         print("Download %d%%." % int(status.progress() * 100))
 
-    with open(ruta, 'wb') as f: ####ruta + nombre_archivo
+    #Escritura de archivo en binario dentro de carpeta Descargas Drive
+    with open(os.path.join(ruta, nombre_archivo), 'wb') as f:
         f.write(fh.read())
 
 def main() -> None:
