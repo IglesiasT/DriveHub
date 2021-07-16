@@ -15,15 +15,16 @@ def pedir_nombre_archivo() -> str:
     """
 
     nombre_archivo = input('Indica el nombre del archivo o carpeta a descargar: ')
+    archivo_valido = False
     
-    while not archivo_valido(nombre_archivo):
-        nombre_archivo = input('Archivo inexistente. Vuelve a intentar\n')
-
     for archivo in ARCHIVOS_EN_DRIVE:
         if archivo['name'].capitalize() == nombre_archivo.capitalize():
-            return True
-    
-    return False 
+            archivo_valido = True
+
+    while not archivo_valido:
+        nombre_archivo = input('Archivo inexistente. Vuelve a intentar\n')
+
+    return nombre_archivo
 
 def obtener_id(nombre_archivo : str) -> str:
     """
