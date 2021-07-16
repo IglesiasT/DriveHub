@@ -112,4 +112,4 @@ def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
     path = carpeta_evaluaciones(ruta_sistema)
     path = carpeta_docente(path, docente)
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
-    archivo.descomprimir_archivo(ubicacion_zip, path)
+    archivos.descomprimir_archivo(ubicacion_zip, path)
