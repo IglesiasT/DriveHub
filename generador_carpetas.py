@@ -14,9 +14,9 @@ BARRA = CADENA[0]
 
 def generador_carpeta_zip() -> None:
     ruta = ruta_desk_w()
-    if not os.path.isfile(ruta + "descargas.zip"):
+    if not os.path.isdir(ruta + "descargas.zip"):
         os.mkdir(f"{ruta}descargas_zip")
-    ruta = ruta + BARRA + "descargas_zip" + BARRA
+    ruta = ruta + "descargas_zip" + BARRA
     return ruta
 
 
@@ -39,13 +39,13 @@ def generador_carpeta(nombre_carpeta: str) -> None:
             pidiendo_nombre = False
 
 
-
 def ruta_desk_w() -> str:
     ruta = os.getcwd()
     divisiones = ruta.split(BARRA)
     ruta_escritorio = []
-    for i in range(4):
+    for i in range(3):
         ruta_escritorio.append(divisiones[i])
+    ruta_escritorio.append("Desktop")
     ruta = BARRA.join(ruta_escritorio)
     return ruta + BARRA
 
@@ -72,6 +72,7 @@ def remover_comillas(palabra: str) -> str:
 
 
 def info_matcheo(padron: str, matcheo: str) -> str:
+    profe = ""
     with open(matcheo, "r") as archivo:
         for linea in archivo:
             linea = linea.rstrip()
@@ -106,16 +107,17 @@ def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
     return path
 
 
-def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
+def crear_carpetas(info_alumno: list) -> None:
     """
     Aclaraciones extra de la funcion, el path se va actualizando a medida que se crean las carpetas
     """
+    ruta_dsk = generador_ruta(OS)
     ubicacion_zip = info_alumno[2]
     archivo_matcheo = "alumnos_profesores.csv"
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
     nombre_alumno = "_" + info_alumno[1].replace(" ", "_")
-    path = carpeta_evaluaciones(ruta_sistema)    # Se reemplaza por funcion que elige donde quiere y
+    path = carpeta_evaluaciones(ruta_dsk)    # Se reemplaza por funcion que elige donde quiere y
     path = carpeta_docente(path, docente)      # con que nombre la carpeta
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
     archivos.descomprimir_archivo(ubicacion_zip, path)
