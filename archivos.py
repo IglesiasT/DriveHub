@@ -20,8 +20,7 @@ def verificar_zip(ruta: str)->bool:
             padron_csv = row[0]
             nombre_apellido_csv = row[1]
             if ((padron in padron_csv) and (nom_apellido == nombre_apellido_csv)):
-                existe = True
-         
+                existe = True   
     return existe
 
 def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
