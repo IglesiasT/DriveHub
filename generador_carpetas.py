@@ -15,6 +15,7 @@ BARRA = CADENA[0]
 def generador_carpeta_zip() -> None:
     ruta = ruta_desk_w()
     os.mkdir(f"{ruta}descargas_zip")
+    ruta = + BARRA + "descargas_zip" + BARRA
 
 
 def generador_carpeta(nombre_carpeta: str) -> None:
@@ -80,6 +81,9 @@ def info_matcheo(padron: str, matcheo: str) -> str:
 
 
 def carpeta_evaluaciones(ruta_desktop: str) -> str:
+    # marcando_carpeta = True
+    # while marcando_carpeta:
+    #     archivos.listar_carpetas()
     if not os.path.isdir(f"{ruta_desktop}Evaluaciones"):
         os.mkdir(f"{ruta_desktop}Evaluaciones")
     path = ruta_desktop + "Evaluaciones" + BARRA
@@ -109,7 +113,7 @@ def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
     nombre_alumno = "_" + info_alumno[1].replace(" ", "_")
-    path = carpeta_evaluaciones(ruta_sistema)
-    path = carpeta_docente(path, docente)
+    path = carpeta_evaluaciones(ruta_sistema)    # Se reemplaza por funcion que elige donde quiere y
+    path = carpeta_docente(path, docente)      # con que nombre la carpeta
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
     archivos.descomprimir_archivo(ubicacion_zip, path)
