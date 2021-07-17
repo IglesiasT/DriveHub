@@ -102,7 +102,7 @@ def carpeta_docente(path: str, docente: str) -> str:
 
 def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
     if not os.path.isdir(path + padron_alumno + alumno):
-        os.mkdir(padron_alumno + alumno)
+        os.mkdir(path + padron_alumno + alumno)
     path = path + padron_alumno + alumno
     return path
 
@@ -120,4 +120,12 @@ def crear_carpetas(info_alumno: list) -> None:
     path = carpeta_evaluaciones(ruta_dsk)    # Se reemplaza por funcion que elige donde quiere y
     path = carpeta_docente(path, docente)      # con que nombre la carpeta
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
+    print(path)
+    print(ubicacion_zip)
     archivos.descomprimir_archivo(ubicacion_zip, path)
+
+# def main():
+#     ruta = ruta_desk_w() + "107789 - Ebbes, Gonzalo" + BARRA + "107789 - Ebbes, Gonzalo.zip"
+#     info_alumno = ["107635", "Nicolas Puccar", ruta]
+#     crear_carpetas(info_alumno)
+# main()
