@@ -8,6 +8,8 @@ import gmail
 import base64
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import generador_carpetas
+import archivos
 
 #GET https://www.googleapis.com/gmail/v1/users/me/messages?q=in:sent after:2014/01/01 before:2014/02/01
 
@@ -89,19 +91,27 @@ def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool):
     raw_string = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
     #message = servicio.users().messages().send(userId='me', body={'raw': raw_string}).execute()
 
-def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict):
+def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict, lista : list,archivo_ruta : str):
 
     flag = evaluar_padron(padron,alumnos)
     if flag == True:
 
         # archivos = generar_carpeta() funcion para generar una carpeta
 
-        # CADENA = "\ "
+        CADENA = "\ "
 
-        # BARRA = CADENA[0]
+        BARRA = CADENA[0]        
+
+        archivo_dir = correo_recibido["payload"]["parts"][1]["filename"]
+        print(archivo_dir)
+
+        ruta_zip = archivo_ruta + BARRA + archivo_dir
 
         # ruta_zip = archivos + BARRA + "123654 - Puccar, Nicolas.zip" 
         
+        booleano = archivos.verificar_zip(ruta_zip)
+        print(booleano)
+
         # funcion verificar_zip( ruta_zip ) devuelve booleano
 
         """
@@ -126,7 +136,7 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
         with open(descripcion, 'wb') as f:
             f.write(codigo)
         try:
-            shutil.move(descripcion, "archivos")
+            shutil.move(descripcion, archivo_ruta)
         except:
             print()
             print("el codigo ya existe")
@@ -135,25 +145,27 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
         generar_mensaje(correo_recibido,servicio,flag)
         print("el asunto del mail fue enviado incorrectamente")
 
-def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : dict):
+def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : dict, archivo_ruta : str):
 
     correo_recibido = servicio.users().messages().get(userId = 'me', id = correo).execute()
     nombre = correo_recibido["payload"]["headers"][19]["value"]
-    try:
-        lista = nombre.split("-")
-        prueba = lista[1]
-    except:
-        None
-        print("no sirve")
-    else:
+
+    lista = nombre.split("-")
+    if len(lista) == 2:
         codeo = lista[0]
         padron = codeo.strip()
         if padron.isnumeric():
-            guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos)
+            guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos,lista,archivo_ruta)
         else:
             print("no sirve tampoco")
+
+    else:
+        print("no sirve")
+
 def main():
     
+    archivo_ruta = generador_carpetas.generador_carpeta_zip()
+
     alumnos = evaluar_alumnos()  
 
     servicio = gmail.obtener_servicio()
@@ -167,6 +179,6 @@ def main():
     identificados = detectar_gmails(recibidos)
 
     for correo in identificados:
-        recibir_archivos(servicio,correo,alumnos,recibidos)
+        recibir_archivos(servicio,correo,alumnos,recibidos,archivo_ruta)
     
 main()
