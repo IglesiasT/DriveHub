@@ -16,6 +16,7 @@ def generador_carpeta_zip() -> None:
     ruta = ruta_desk_w()
     os.mkdir(f"{ruta}descargas_zip")
     ruta = + BARRA + "descargas_zip" + BARRA
+    return ruta
 
 
 def generador_carpeta(nombre_carpeta: str) -> None:
