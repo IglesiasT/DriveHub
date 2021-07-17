@@ -14,8 +14,9 @@ BARRA = CADENA[0]
 
 def generador_carpeta_zip() -> None:
     ruta = ruta_desk_w()
-    os.mkdir(f"{ruta}descargas_zip")
-    ruta = + BARRA + "descargas_zip" + BARRA
+    if not os.path.isfile(ruta + "descargas.zip"):
+        os.mkdir(f"{ruta}descargas_zip")
+    ruta = ruta + BARRA + "descargas_zip" + BARRA
     return ruta
 
 
