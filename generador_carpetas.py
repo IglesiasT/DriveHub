@@ -1,5 +1,6 @@
 import platform
 import os
+import archivos
 
 # Recibo estructura del estilo:
 # CSV del matcheo, cada linea:   PADRON, Apellido_profe
@@ -11,12 +12,32 @@ CADENA = "\ "
 BARRA = CADENA[0]
 
 
-def generador_carpeta_zip(BARRA: str) -> None:
-    ruta = ruta_desk_w(BARRA)
+def generador_carpeta_zip() -> None:
+    ruta = ruta_desk_w()
     os.mkdir(f"{ruta}descargas_zip")
 
 
-def ruta_desk_w(BARRA: str) -> str:
+def generador_carpeta(nombre_carpeta: str) -> None:
+    ruta = ruta_desk_w()
+    pidiendo_nombre = True
+    while pidiendo_nombre:
+        try:
+            os.mkdir(ruta + nombre_carpeta)
+        except IOError:
+            if os.path.isdir(ruta + nombre_carpeta):
+                nombre_carpeta = input("La carpeta ya existe, ingrese otro nombre o Exit para cancelar: ")
+                if nombre_carpeta == "Exit":
+                    pidiendo_nombre = False
+            else:
+                nombre_carpeta = input("El nombre ingresado contiene caracteres invalidos,"
+                                       " por favor intente denuevo: ")
+        else:
+            print("La carpeta se ha creado correctamente")
+            pidiendo_nombre = False
+
+
+
+def ruta_desk_w() -> str:
     ruta = os.getcwd()
     divisiones = ruta.split(BARRA)
     ruta_escritorio = []
@@ -26,9 +47,9 @@ def ruta_desk_w(BARRA: str) -> str:
     return ruta + BARRA
 
 
-def generador_ruta(sistema_actual: str, BARRA: str) -> str:
+def generador_ruta(sistema_actual: str) -> str:
     if sistema_actual == "Windows":
-        ruta = ruta_desk_w(BARRA)
+        ruta = ruta_desk_w()
     elif sistema_actual == "Linux":
         pass
     elif sistema_actual == "Mac":
@@ -80,27 +101,15 @@ def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
 
 
 def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
-    ubicacaion_zip = info_alumno[2]
-    archivo_matcheo = "matcheo.csv"        # Hay que actualizar el nombre
+    """
+    Aclaraciones extra de la funcion, el path se va actualizando a medida que se crean las carpetas
+    """
+    ubicacion_zip = info_alumno[2]
+    archivo_matcheo = "alumnos_profesores.csv"
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
     nombre_alumno = "_" + info_alumno[1].replace(" ", "_")
     path = carpeta_evaluaciones(ruta_sistema)
     path = carpeta_docente(path, docente)
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
-    # descomprimir_zip(ubicacion_zip, path)
-
-
-
-
-# url del repo: https://github.com/IglesiasT/TP2.git
-def main() -> None:
-    ruta = generador_ruta(OS, BARRA)
-    base_alumnos = [["107123", "Ebbes_Gonzalo", "<direccion.zip>"],
-                   ["107515", "Nicolas Puccar", "<direccion.zip>"]]
-    for elem in base_alumnos:
-        info_alumno = elem
-        crear_carpetas(info_alumno, ruta)
-    generador_carpeta_zip(BARRA)
-
-main()
+    archivos.descomprimir_archivo(ubicacion_zip, path)
