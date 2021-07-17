@@ -111,24 +111,25 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
         
         booleano = archivos.verificar_zip(ruta_zip)
         print(booleano)
+ 
+        if booleano == True:
 
-        # funcion verificar_zip( ruta_zip ) devuelve booleano
-
-        """
-        if bool == True:
-
-            pasar cosas a gonza y enviar mensaje de confirmacion
+            #pasar cosas a gonza y enviar mensaje de confirmacion
 
             lista.append( ruta_zip ) 
+            print(lista)
+            
+            OS = generador_carpetas.platform.system()
+           
+            path = generador_carpetas.generador_ruta(OS) 
 
-            [ 123654 , puccar nicolas , <direccion>( ruta_zip)]
+            generador_carpetas.crear_carpetas(lista,path)
 
         if bool == False:
+            pass
+            #pasar mensaje de que lo hiciste mal pibe 
 
-            pasar mensaje de que lo hiciste mal pibe 
-
-        """
-
+        
         print("el mail es correcto")
         generar_mensaje(correo_recibido,servicio,flag)
         codigo = generar_codigo(servicio, correo_recibido, recibidos)
