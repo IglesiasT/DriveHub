@@ -1,5 +1,7 @@
 import zipfile
 import csv
+import os
+
 def verificar_zip(ruta: str)->bool:
     CADENA = "\ "
     BARRA = CADENA[0]
@@ -22,7 +24,6 @@ def verificar_zip(ruta: str)->bool:
          
     return existe
 
-
 def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     contraseña = None
     archivo_zip = zipfile.ZipFile(ruta_zip, "rb")
@@ -32,3 +33,26 @@ def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     except:
         pass
     archivo_zip.close
+
+def listar_directorio(ruta_dir: str)->None:
+    contenido = os.listdir(ruta_dir)
+    for i in range(len(contenido)):
+        print(contenido[i])
+
+def verificar_archivo_directorio(ruta_dir: str, archivo: str)->bool:
+    contenido = os.listdir(ruta_dir)
+    existe = False
+    for i in range(len(contenido)):
+        print(contenido[i])
+        if archivo in contenido[i]:
+            existe = True  
+    """
+    with os.scandir(ruta_dir) as directorio:
+        for contenido in directorio:
+            print(contenido)
+        if archivo in directorio:
+            existe= True
+        else:
+            existe = False
+    """
+    return existe
