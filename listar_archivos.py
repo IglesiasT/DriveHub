@@ -1,19 +1,19 @@
 from service_drive import obtener_servicio
 
 SERVICIO = obtener_servicio()
-SOLICITUD = SERVICIO.files().list().execute()   ###poner parametros de archivos deseados en list()
 
-def busqueda_por_filtros(): ###recibir por parametro el filtro deseado?
+def busqueda_por_filtros(filtros : list):
     """
     """
-
+    
+    solicitud = SERVICIO.files().list().execute()
     page_token = None
 
     while True:
-        for archivo in SOLICITUD.get('files', []):  #Recorre los archivos en Drive del usuario
-            print ('Found file: %s (%s)' % (archivo.get('name'), archivo.get('id')))    ###investigar funcionamiento
+        for archivo in solicitud.get('files', []):  #Recorre los archivos en Drive del usuario
+            print('Found file: %s (%s)' % (archivo.get('name'), archivo.get('id')))    ###archivo.get('name')
 
-        page_token = SOLICITUD.get('nextPageToken', None)
+        page_token = solicitud.get('nextPageToken', None)
         
         if page_token is None:
             break
@@ -42,12 +42,13 @@ def main() -> None:
             if opcion not in filtros_deseados:
                 filtros_deseados.append(filtros_permitidos[opcion])
         
-        except IndexError:  ###entra con el 4 por ser indexerror
+        except IndexError:
             if opcion != len(filtros_permitidos):
                 print('Opción inválida')
 
         except TypeError:
             print('Debes introducir un número')
 
-    
+    busqueda_por_filtros(filtros_deseados)
+
 main()
