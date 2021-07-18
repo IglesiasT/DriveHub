@@ -3,13 +3,13 @@ from service_drive import obtener_servicio
 SERVICIO = obtener_servicio()
 FILTROS_PERMITIDOS = {
     'Tipo de archivo': {
-        'Imagen': '',
-        'Video': '',
-        'Carpeta': 'application/vnd.google-apps.folder'
+        'Imagen': 'image/jpeg',
+        'Video': 'video/mp4',
+        'Carpeta': 'application/vnd.google-apps.folder',
+        'Texto': 'text/plain',
     },
-    'Nombre de archivo': '',
-    'Compartido conmigo': 'SharedWithMe',
-    'Fecha': ''
+    'Nombre de archivo': None,
+    'Compartido conmigo': False
 }
 
 def busqueda_por_filtros(filtros : list):
@@ -39,7 +39,7 @@ def main() -> None:
         print(f'{len(FILTROS_PERMITIDOS)} - Salir')
 
         try:
-            print('----- Listado de archivos -----')
+            print('----- Listado de archivos y carpetas -----')
             opcion = int(input('Introduzca una opción para agregar un filtro:'))
             print(f'Filtros establecidos: {filtros_deseados}')
             
