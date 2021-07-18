@@ -1,11 +1,21 @@
 from service_drive import obtener_servicio
 
 SERVICIO = obtener_servicio()
+FILTROS_PERMITIDOS = {
+    'Tipo de archivo': {
+        'Imagen': '',
+        'Video': '',
+        'Carpeta': 'application/vnd.google-apps.folder'
+    },
+    'Nombre de archivo': '',
+    'Compartido conmigo': 'SharedWithMe',
+    'Fecha': ''
+}
 
 def busqueda_por_filtros(filtros : list):
     """
     """
-    
+    ###recorrer filtros y al final printear los archivos que hayan cumplido con todos los filtros
     solicitud = SERVICIO.files().list().execute()
     page_token = None
 
@@ -18,21 +28,15 @@ def busqueda_por_filtros(filtros : list):
         if page_token is None:
             break
 
-def main() -> None:
-    filtros_permitidos = [
-        'Tipo de archivo',
-        'Nombre de archivo',
-        'Compartido conmigo',
-        'Fecha'
-        ]        
+def main() -> None:        
     filtros_deseados = []
     opcion = None
 
-    while opcion != len(filtros_permitidos):
+    while opcion != len(FILTROS_PERMITIDOS):
         #Muestra menu al usuario con el formato <opcion> - <tipo de filtro>
-        for indice, filtro in enumerate(filtros_permitidos):
+        for indice, filtro in enumerate(FILTROS_PERMITIDOS.keys()):
             print(f'{indice} - {filtro}')
-        print(f'{len(filtros_permitidos)} - Salir')
+        print(f'{len(FILTROS_PERMITIDOS)} - Salir')
 
         try:
             print('----- Listado de archivos -----')
@@ -43,7 +47,7 @@ def main() -> None:
                 filtros_deseados.append(filtros_permitidos[opcion])
         
         except IndexError:
-            if opcion != len(filtros_permitidos):
+            if opcion != len(FILTROS_PERMITIDOS):
                 print('Opción inválida')
 
         except TypeError:
