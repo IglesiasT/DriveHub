@@ -43,9 +43,11 @@ def main() -> None:
                 filtros_deseados.append(filtros_permitidos[opcion])
         
         except IndexError:  ###entra con el 4 por ser indexerror
-            print('Opción inválida')
+            if opcion != len(filtros_permitidos):
+                print('Opción inválida')
 
         except TypeError:
             print('Debes introducir un número')
 
+    
 main()
