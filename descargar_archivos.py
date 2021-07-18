@@ -73,7 +73,7 @@ def descargar_archivo(id_archivo : str, nombre_archivo : str) -> None:
 
     #Escritura de archivo en binario dentro de carpeta Descargas Drive
     with open(os.path.join(ruta, nombre_archivo), 'wb') as f:
-        f.write(fh.read())
+        f.write(fh.read())  ###revisar fh.read()
 
 def main() -> None:
     
