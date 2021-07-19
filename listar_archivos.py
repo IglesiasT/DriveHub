@@ -1,16 +1,6 @@
 from service_drive import obtener_servicio
 
 SERVICIO = obtener_servicio()
-FILTROS_PERMITIDOS = {
-    'Tipo de archivo': {
-        'Imagen': 'image/jpeg',
-        'Video': 'video/mp4',
-        'Carpeta': 'application/vnd.google-apps.folder',
-        'Texto': 'text/plain',
-    },
-    'Nombre de archivo': None,
-    'Compartido conmigo': False
-}
 
 def busqueda_por_filtros(filtros : list):
     """
@@ -32,26 +22,37 @@ def main() -> None:
     filtros_deseados = []
     opcion = None
 
-    while opcion != len(FILTROS_PERMITIDOS):
-        #Muestra menu al usuario con el formato <opcion> - <tipo de filtro>
-        for indice, filtro in enumerate(FILTROS_PERMITIDOS.keys()):
-            print(f'{indice} - {filtro}')
-        print(f'{len(FILTROS_PERMITIDOS)} - Salir')
-
-        try:
-            print('----- Listado de archivos y carpetas -----')
-            opcion = int(input('Introduzca una opción para agregar un filtro:'))
-            print(f'Filtros establecidos: {filtros_deseados}')
-            
-            if opcion not in filtros_deseados:
-                filtros_deseados.append(filtros_permitidos[opcion])
+    print('----- Listado de archivos y carpetas -----')
+    
+    while opcion != 4:
+        print('1 - Tipo de archivo\n2 - Nombre de archivo\n3 - Compartido conmigo\n4 - Salir')
+        opcion = int(input('Introduce el numero asociado al filtro deseado, si no deseas filtrar introduce 4'))
         
-        except IndexError:
-            if opcion != len(FILTROS_PERMITIDOS):
-                print('Opción inválida')
+        if opcion == 1:
+            tipo_archivo = None
+            while tipo_archivo != 4:
+                print('1 - Imagenes\n2 - Videos\n3 - Carpetas\n4 - Volver')
+                tipo_archivo = int(input('Qué tipo de archivos deseas buscar?'))
+                
+                #validar que la opcion no se encuentra ya en filtros deseados
+                if tipo_archivo == 1:
+                    filtros_deseados.append('image/jpeg')
+                if tipo_archivo == 2:
+                    filtros_deseados.append('video/mp4')
+                if tipo_archivo == 3:
+                    filtros_deseados.append('application/vnd.google-apps.folder')
+                else:
+                    print('Opcion invalida')
 
-        except TypeError:
-            print('Debes introducir un número')
+        if opcion == 2:
+            nombre_archivo = input('Introduce el nombre: ')
+            filtros_deseados.append(nombre_archivo)
+
+        if opcion == 3:
+            filtros_deseados.append(True)
+
+        else:
+            print('Debes introducir el número asociado al filtro deseado')
 
     busqueda_por_filtros(filtros_deseados)
 
