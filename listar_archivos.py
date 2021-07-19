@@ -4,6 +4,12 @@ SERVICIO = obtener_servicio()
 
 def busqueda_por_filtros(filtros : list):
     """
+    if not filtros (lista vacia) printear todos los archivos
+    if Imagenes q='mimeType="image/jpeg"'
+    if Videos q='mimeType="video/mp3"'
+    if Carpetas q='mimeType="application/vnd.google-apps.folder'
+    if isinstance(i, tuple()) caso tupla (nombre, nombre_deseado) recordar clase objetos aclarar como PRE
+    else filtro desconocido
     """
     ###recorrer filtros y al final printear los archivos que hayan cumplido con todos los filtros
     solicitud = SERVICIO.files().list().execute()
