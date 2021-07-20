@@ -129,3 +129,37 @@ def crear_carpetas(info_alumno: list) -> None:
 #     info_alumno = ["107635", "Nicolas Puccar", ruta]
 #     crear_carpetas(info_alumno)
 # main()
+def desempaquetar_orden(comando: str) -> list:
+    partes = comando.split(" - ")
+    return partes
+
+
+def conseguir_usuario() -> str:
+    ruta = os.getcwd()
+    partes = BARRA.split(ruta)
+    usuario = partes[2]
+    return usuario
+
+
+def ejecutar_comandos() -> None:
+    exit = False
+    ruta = ""
+    # print reglas comando
+    usuario = conseguir_usuario()
+    while not exit:
+        # listar opciones
+        comando = input(f"{usuario}: ")
+        orden = desempaquetar_orden(comando)
+        if orden[0] == "cd":
+            if orden[1] == ".."
+                # def borrar ultima ruta
+            else:
+                # redefinir ruta y
+        elif orden[0] == "mk":
+            # Crear carpeta o archivo
+        elif orden[0] == "help":
+            # printear reglas comando
+        elif orden[0] == "exit":
+            exit = True
+        else:
+            print("El comando es invalido, si necesita ayuda utilice 'help' ")
