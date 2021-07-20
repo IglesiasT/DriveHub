@@ -25,7 +25,7 @@ def verificar_zip(ruta: str)->bool:
 
 def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     contraseña = None
-    archivo_zip = zipfile.ZipFile(ruta_zip, "rb")
+    archivo_zip = zipfile.ZipFile(ruta_zip, "r")
     try:
         print(archivo_zip.namelist())
         archivo_zip.extractall(pwd=contraseña, path=ruta_extraccion)
@@ -37,6 +37,16 @@ def listar_directorio(ruta_dir: str)->None:
     contenido = os.listdir(ruta_dir)
     for i in range(len(contenido)):
         print(contenido[i])
+
+def listar_carpetas(ruta_dir: str)-> list:
+    lista_carpetas = []
+    for contenido in os.listdir(ruta_dir):
+        ruta_completa = os.path.join(ruta_dir, contenido)
+        if os.path.isdir(ruta_completa):
+            lista_carpetas.append(contenido)
+
+    return lista_carpetas
+
 
 def verificar_archivo_directorio(ruta_dir: str, archivo: str)->bool:
     contenido = os.listdir(ruta_dir)
