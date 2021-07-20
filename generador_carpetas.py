@@ -1,6 +1,7 @@
 import platform
 import os
 import archivos
+import csv
 
 # Recibo estructura del estilo:
 # CSV del matcheo, cada linea:   PADRON, Apellido_profe
@@ -72,13 +73,18 @@ def remover_comillas(palabra: str) -> str:
 
 
 def info_matcheo(padron: str, matcheo: str) -> str:
-    with open(matcheo, "r") as archivo:
-        for linea in archivo:
-            linea = linea.rstrip()
-            if padron in linea:
-                data_match = linea.split(",")
-                profe = data_match[1]
-                profe = remover_comillas(profe)
+    profe = ""
+    
+    with open(matcheo, mode ='r', newline='', encoding="UTF-8") as archivo:
+        csv_reader = csv.reader(archivo, delimiter=',')
+        next(csv_reader)
+        for row in csv_reader:
+            profesor = row[1]
+            padron_csv = row[0]
+            if padron_csv in padron:
+                print("padron: ",padron_csv,"profesor: ",profesor)
+                profe = profesor  
+    print(profe)
     return profe
 
 
@@ -101,21 +107,32 @@ def carpeta_docente(path: str, docente: str) -> str:
 
 def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
     if not os.path.isdir(path + padron_alumno + alumno):
-        os.mkdir(padron_alumno + alumno)
+        os.mkdir(path + padron_alumno + alumno)
+    else: 
+        print(path + padron_alumno + alumno)
     path = path + padron_alumno + alumno
     return path
 
+def encontrar_usuario():
+    pass
 
-def crear_carpetas(info_alumno: list, ruta_sistema: str) -> None:
+def crear_carpetas(info_alumno: list) -> None:
     """
     Aclaraciones extra de la funcion, el path se va actualizando a medida que se crean las carpetas
     """
+
+    usuario = encontrar_usuario()
+    usuario = "Hector"
+    ruta_dsk = "C:"+ BARRA + "Users" + BARRA + usuario + BARRA + "Desktop" + BARRA # C:\Users\Hector\Desktop
     ubicacion_zip = info_alumno[2]
     archivo_matcheo = "alumnos_profesores.csv"
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
     nombre_alumno = "_" + info_alumno[1].replace(" ", "_")
-    path = carpeta_evaluaciones(ruta_sistema)    # Se reemplaza por funcion que elige donde quiere y
+    path = carpeta_evaluaciones(ruta_dsk)    # Se reemplaza por funcion que elige donde quiere y
     path = carpeta_docente(path, docente)      # con que nombre la carpeta
+    
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
+    print(path)
+    print(ubicacion_zip)
     archivos.descomprimir_archivo(ubicacion_zip, path)

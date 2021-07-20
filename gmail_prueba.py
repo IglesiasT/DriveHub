@@ -76,11 +76,14 @@ def evaluar_padron(padron : str, alumnos : dict):
         
     return flag
 
-def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool):
+def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool, booleano : bool):
 
     destinatario = correo_recibido["payload"]["headers"][6]["value"]
     if flag == True:
-        emailMsg = "su correo fue recibido correctamente"
+        if booleano == True:
+            emailMsg = "su correo fue recibido correctamente"
+        elif booleano == False:
+            emailMsg = "el archivo adjunto no es correcto, envie nuevamente el mail con el archivo correcto"
     elif flag == False:
         emailMsg = "el padron es incorrecto, envie el email con el padron correcto"
     mimeMessage = MIMEMultipart()
@@ -92,10 +95,10 @@ def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool):
     #message = servicio.users().messages().send(userId='me', body={'raw': raw_string}).execute()
 
 def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict, lista : list,archivo_ruta : str):
-
+    
     flag = evaluar_padron(padron,alumnos)
     if flag == True:
-
+        
         # archivos = generar_carpeta() funcion para generar una carpeta
 
         CADENA = "\ "
@@ -113,6 +116,21 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
         print(booleano)
  
         if booleano == True:
+            
+            print("el mail es correcto")
+            generar_mensaje(correo_recibido,servicio,flag,booleano)
+            codigo = generar_codigo(servicio, correo_recibido, recibidos)
+            descripcion = correo_recibido["payload"]["parts"][1]["filename"]
+            with open(descripcion, 'wb') as f:
+                f.write(codigo)
+            try:
+                shutil.move(descripcion, archivo_ruta)
+            except:
+                print()
+                print("el codigo ya existe")
+
+            print("el mail es correcto")
+            generar_mensaje(correo_recibido,servicio,flag,booleano)
 
             #pasar cosas a gonza y enviar mensaje de confirmacion
 
@@ -122,16 +140,20 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
             OS = generador_carpetas.platform.system()
            
             path = generador_carpetas.generador_ruta(OS) 
+            print("path: ",path)
+            generador_carpetas.crear_carpetas(lista)
 
-            generador_carpetas.crear_carpetas(lista,path)
-
-        if bool == False:
+        if booleano == False:
             pass
             #pasar mensaje de que lo hiciste mal pibe 
+            print("el mail no es correcto")
+            generar_mensaje(correo_recibido,servicio,flag,booleano)
 
-        
+
+        """
+        booleano = True
         print("el mail es correcto")
-        generar_mensaje(correo_recibido,servicio,flag)
+        generar_mensaje(correo_recibido,servicio,flag,booleano)
         codigo = generar_codigo(servicio, correo_recibido, recibidos)
         descripcion = correo_recibido["payload"]["parts"][1]["filename"]
         with open(descripcion, 'wb') as f:
@@ -141,9 +163,12 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
         except:
             print()
             print("el codigo ya existe")
+        """
+            
     elif flag == False:     
         #messages = serviciousers().messages().get(userId = 'me').execute()
-        generar_mensaje(correo_recibido,servicio,flag)
+        booleano = False
+        generar_mensaje(correo_recibido,servicio,flag,booleano)
         print("el asunto del mail fue enviado incorrectamente")
 
 def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : dict, archivo_ruta : str):
