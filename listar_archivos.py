@@ -24,20 +24,21 @@ def busqueda_por_filtros(filtros : list):
         if page_token is None:
             break
 
-def main() -> None:        
-    filtros_deseados = []
+def main() -> None:
+    filtros_posibles = ('Tipo', 'Nombre')
+    filtros_deseados = set()
     opcion = None
 
     print('----- Listado de archivos y carpetas -----')
     
-    while opcion != 3:
+    while opcion != len(filtros_posibles):
         print('1 - Tipo de archivo\n2 - Nombre de archivo\n3 - Salir')
         opcion = int(input('Introduce el numero asociado al filtro deseado, si no deseas filtrar introduce 3'))
         
         if opcion == 1:
             tipo_archivo = None
-            while tipo_archivo != 3:
-                print('1 - Imagenes\n2 - Videos\n3 - Carpetas\n3 - Volver')
+            while tipo_archivo != 4:
+                print('1 - Imagenes\n2 - Videos\n3 - Carpetas\n4 - Volver')
                 tipo_archivo = int(input('Qué tipo de archivos deseas buscar?'))
                 
                 #validar que la opcion no se encuentra ya en filtros deseados
