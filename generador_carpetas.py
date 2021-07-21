@@ -62,7 +62,7 @@ def generador_carpeta(nombre_carpeta: str, ruta_base: str) -> None:
 def averiguar_usuario_w(opciones: list) -> str:
     buscando = True
     USUARIO = ""
-    carpetas_inutiles = ["All Users","Default","Default User","Public"]
+    carpetas_inutiles = ["All Users", "Default", "Default User", "Public"]
     for carpeta in opciones:
         if buscando and os.path.isdir("C:/Users/" + carpeta + "/Desktop") and carpeta not in carpetas_inutiles:
             pregunta = input(f"Tu usuario es {carpeta}? (s/n): ")
@@ -136,10 +136,23 @@ def info_matcheo(padron: str, matcheo: str) -> str:
     return profe
 
 
-def carpeta_evaluaciones(ruta_desktop: str) -> str:
-    if not os.path.isdir(f"{ruta_desktop}Evaluaciones"):
-        os.mkdir(f"{ruta_desktop}Evaluaciones")
-    path = ruta_desktop + "Evaluaciones" + BARRA
+def verificar_dir(direccion: str) -> str:
+    while not os.path.isdir(direccion):
+        direccion = input("La ruta es incorrecta, intenta denuevo: ")
+    return direccion
+
+
+def carpeta_evaluaciones() -> str:
+    existe = input("La carpeta de evaluaciones existe (1) o quieres crearla(2)? : ")
+    if existe == "1":
+        direccion = input("Cual es la ruta completa de la carpeta: ")
+        path = verificar_dir(direccion)
+    else:
+        direccion = input("Donde quieres crear la carpeta? : ")
+        direccion = verificar_dir(direccion)
+        nombre = input("Que nombre tendra la carpeta evaluacion? : ")
+        generador_carpeta(nombre, direccion)
+        path = direccion + "/" + nombre + "/"
     return path
 
 
@@ -157,18 +170,17 @@ def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
     return path
 
 
-def crear_carpetas(info_alumno: list) -> None:
+def crear_carpetas(info_alumno: list, carpeta_evaluacion: str) -> None:
     """
     Aclaraciones extra de la funcion, el path se va actualizando a medida que se crean las carpetas
     """
-    ruta_dsk = generador_ruta_base(OS)
     ubicacion_zip = info_alumno[2]
     archivo_matcheo = "alumnos_profesores.csv"
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
     nombre_alumno = "_" + info_alumno[1].replace(" ", "_")
-    path = carpeta_evaluaciones(ruta_dsk)    # Se reemplaza por funcion que elige donde quiere y
-    path = carpeta_docente(path, docente)      # con que nombre la carpeta
+    path = carpeta_evaluacion
+    path = carpeta_docente(path, docente)
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
     archivos.descomprimir_archivo(ubicacion_zip, path)
 
