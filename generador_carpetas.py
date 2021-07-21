@@ -78,7 +78,7 @@ def ruta_desk_w() -> str:
     return ruta_desktop
 
 
-def generador_ruta(sistema_actual: str) -> str:
+def generador_ruta_base(sistema_actual: str) -> str:
     if sistema_actual == "Windows":
         ruta = ruta_desk_w()
     elif sistema_actual == "Linux":
@@ -148,7 +148,7 @@ def crear_carpetas(info_alumno: list) -> None:
     """
     Aclaraciones extra de la funcion, el path se va actualizando a medida que se crean las carpetas
     """
-    ruta_dsk = generador_ruta(OS)
+    ruta_dsk = generador_ruta_base(OS)
     ubicacion_zip = info_alumno[2]
     archivo_matcheo = "alumnos_profesores.csv"
     padron_alumno = info_alumno[0]
@@ -157,8 +157,6 @@ def crear_carpetas(info_alumno: list) -> None:
     path = carpeta_evaluaciones(ruta_dsk)    # Se reemplaza por funcion que elige donde quiere y
     path = carpeta_docente(path, docente)      # con que nombre la carpeta
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
-    print(path)
-    print(ubicacion_zip)
     archivos.descomprimir_archivo(ubicacion_zip, path)
 
 
@@ -196,4 +194,3 @@ def conseguir_usuario() -> str:
 #             exit = True
 #         else:
 #             print("El comando es invalido, si necesita ayuda utilice 'help' ")
-ruta_desk_w()
