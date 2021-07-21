@@ -37,30 +37,9 @@ def main() -> None:
             print(f'{i} - {filtros_posibles[i]}')
         print(f'{len(filtros_posibles)} - Salir')
 
-        opcion = int(input('Introduce el numero asociado al filtro deseado, si no deseas filtrar introduce 3'))
+        opcion = int(input('Introduce el número asociado al filtro deseado, si no deseas filtrar introduce Salir'))
         
-        if opcion == 1:
-            tipo_archivo = None
-            while tipo_archivo != 4:
-                print('1 - Imagenes\n2 - Videos\n3 - Carpetas\n4 - Volver')
-                tipo_archivo = int(input('Qué tipo de archivos deseas buscar?'))
-                
-                #validar que la opcion no se encuentra ya en filtros deseados
-                if tipo_archivo == 1:
-                    filtros_deseados.append('image/jpeg')
-                if tipo_archivo == 2:
-                    filtros_deseados.append('video/mp3')
-                if tipo_archivo == 3:
-                    filtros_deseados.append('application/vnd.google-apps.folder')
-                else:
-                    print('Opcion invalida')
-
-        if opcion == 2:
-            nombre_archivo = input('Introduce el nombre: ')
-            filtros_deseados.append(nombre_archivo)
-
-        else:
-            print('Debes introducir el número asociado al filtro deseado')
+        
 
     busqueda_por_filtros(filtros_deseados)
 
