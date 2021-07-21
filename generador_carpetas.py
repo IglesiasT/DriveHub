@@ -1,6 +1,7 @@
 import platform
 import os
 import archivos
+import csv
 
 # Recibo estructura del estilo:
 # CSV del matcheo, cada linea:   PADRON, Apellido_profe
@@ -18,12 +19,14 @@ BARRA = CADENA[0]
 # ### Prestado de Ro ###
 
 
-def listar_carpetas(ruta_dir: str) -> list:
+def listar_carpetas(ruta_dir: str, printear = False) -> list:
     lista_carpetas = []
     for contenido in os.listdir(ruta_dir):
         ruta_completa = os.path.join(ruta_dir, contenido)
         if os.path.isdir(ruta_completa):
             lista_carpetas.append(contenido)
+            if printear:
+                print(ruta_completa)
     return lista_carpetas
 
 
@@ -38,14 +41,13 @@ def generador_carpeta_zip() -> None:
     return ruta
 
 
-def generador_carpeta(nombre_carpeta: str) -> None:
-    ruta = ruta_desk_w()
+def generador_carpeta(nombre_carpeta: str, ruta_base: str) -> None:
     pidiendo_nombre = True
     while pidiendo_nombre:
         try:
-            os.mkdir(ruta + nombre_carpeta)
+            os.mkdir(ruta_base + nombre_carpeta)
         except IOError:
-            if os.path.isdir(ruta + nombre_carpeta):
+            if os.path.isdir(ruta_base + nombre_carpeta):
                 nombre_carpeta = input("La carpeta ya existe, ingrese otro nombre o Exit para cancelar: ")
                 if nombre_carpeta == "Exit":
                     pidiendo_nombre = False
@@ -60,8 +62,9 @@ def generador_carpeta(nombre_carpeta: str) -> None:
 def averiguar_usuario_w(opciones: list) -> str:
     buscando = True
     USUARIO = ""
+    carpetas_inutiles = ["All Users","Default","Default User","Public"]
     for carpeta in opciones:
-        if buscando and os.path.isdir("C:/Users/" + carpeta + "/Desktop"):
+        if buscando and os.path.isdir("C:/Users/" + carpeta + "/Desktop") and carpeta not in carpetas_inutiles:
             pregunta = input(f"Tu usuario es {carpeta}? (s/n): ")
             if pregunta == "s":
                 buscando = False
@@ -101,7 +104,7 @@ def generador_ruta_base(sistema_actual: str) -> str:
     if sistema_actual == "Windows":
         ruta = ruta_desk_w()
     elif sistema_actual == "Linux":
-        pass
+        ruta = ruta_desk_linux()
     elif sistema_actual == "Mac":
         pass
     else:
@@ -120,29 +123,20 @@ def remover_comillas(palabra: str) -> str:
 
 def info_matcheo(padron: str, matcheo: str) -> str:
     profe = ""
-    with open(matcheo, mode='r', newline='', encoding="UTF-8") as alumnos_csv:
-        csv_reader = csv.reader(alumnos_csv, delimiter=',')
+    with open(matcheo, mode='r', newline='', encoding="UTF-8") as archivo:
+        csv_reader = csv.reader(archivo, delimiter=',')
         next(csv_reader)
         for row in csv_reader:
+            profesor = row[1]
             padron_csv = row[0]
-            nombre_apellido_csv = row[1]
-            if ((padron in padron_csv) and (nom_apellido == nombre_apellido_csv)):
-                existe = True
-
-    # with open(matcheo, "r") as archivo:
-    #     for linea in archivo:
-    #         linea = linea.rstrip()
-    #         if padron in linea:
-    #             data_match = linea.split(",")
-    #             profe = data_match[1]
-    #             profe = remover_comillas(profe)
+            if padron_csv in padron:
+                print("padron: ", padron_csv, "profesor: ", profesor)
+                profe = profesor
+                print(profe)
     return profe
 
 
 def carpeta_evaluaciones(ruta_desktop: str) -> str:
-    # marcando_carpeta = True
-    # while marcando_carpeta:
-    #     archivos.listar_carpetas()
     if not os.path.isdir(f"{ruta_desktop}Evaluaciones"):
         os.mkdir(f"{ruta_desktop}Evaluaciones")
     path = ruta_desktop + "Evaluaciones" + BARRA
@@ -206,3 +200,5 @@ def desempaquetar_orden(comando: str) -> list:
 #             exit = True
 #         else:
 #             print("El comando es invalido, si necesita ayuda utilice 'help' ")
+# info = ["107717", "Fiamini, Carlos", "C:/users/Gonza/desktop/107789 - Ebbes, Gonzalo/107789 - Ebbes, Gonzalo.zip"]
+# crear_carpetas(info)
