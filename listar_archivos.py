@@ -32,7 +32,11 @@ def main() -> None:
     print('----- Listado de archivos y carpetas -----')
     
     while opcion != len(filtros_posibles):
-        print('1 - Tipo de archivo\n2 - Nombre de archivo\n3 - Salir')
+        
+        for i in range(len(filtros_posibles)):  #Muestro opciones al usuario
+            print(f'{i} - {filtros_posibles[i]}')
+        print(f'{len(filtros_posibles)} - Salir')
+
         opcion = int(input('Introduce el numero asociado al filtro deseado, si no deseas filtrar introduce 3'))
         
         if opcion == 1:
