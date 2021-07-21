@@ -2,6 +2,15 @@ from service_drive import obtener_servicio
 
 SERVICIO = obtener_servicio()
 
+def pedir_tipo() -> str:
+    """
+    """
+
+    tipo = ''
+    
+
+    return tipo
+
 def busqueda_por_filtros(filtros : list):
     """
     if not filtros (lista vacia) printear todos los archivos
@@ -36,12 +45,13 @@ def main() -> None:
         opcion = int(input('\nFiltro deseado: '))
 
         if opcion == 1:
-            pass
+            filtros_deseados.append(pedir_tipo())
+
         if opcion == 2:
             pass
-        else:
+        elif opcion != 3:
             print('Opción inválida, volvé a intentar')
-            
-    busqueda_por_filtros(filtros_deseados)
+
+    busqueda_por_filtros(set(filtros_deseados)) #set para no tener filtros repetidos
 
 main()
