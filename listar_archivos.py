@@ -35,7 +35,7 @@ def pedir_tipo() -> str:
 
     return tipo
 
-def busqueda_por_filtros(filtros : list):
+def busqueda_por_filtros(filtros : set) -> None:
     """
     if not filtros (lista vacia) printear todos los archivos
     if Imagenes q='mimeType="image/jpeg"'
@@ -43,8 +43,6 @@ def busqueda_por_filtros(filtros : list):
     if Carpetas q='mimeType="application/vnd.google-apps.folder'
     if isinstance(i, tuple()) caso tupla (nombre, nombre_deseado) recordar clase objetos aclarar como PRE
     else filtro desconocido
-    """
-    ###recorrer filtros y al final printear los archivos que hayan cumplido con todos los filtros
     solicitud = SERVICIO.files().list().execute()
     page_token = None
 
@@ -56,6 +54,10 @@ def busqueda_por_filtros(filtros : list):
         
         if page_token is None:
             break
+    """
+    
+    #busquedas anidadas
+    
 
 def main() -> None:
     filtros_deseados = []
@@ -76,7 +78,7 @@ def main() -> None:
         if opcion == 2:
             nombre_archivos = input('Ingresa el nombre: ')
             filtros_deseados.append(nombre_archivos)
-            
+
         elif opcion != 3:
             print('Opción inválida, volvé a intentar')
 
