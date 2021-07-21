@@ -1,13 +1,18 @@
 from service_drive import obtener_servicio
 
 SERVICIO = obtener_servicio()
+DATOS_FILTROS = {
+    'Imagenes': 'image/jpeg',
+    'Videos': 'video/mp3',
+    'Carpetas': 'application/vnd.google-apps.folder'
+}
 
 def pedir_tipo() -> str:
     """
     """
 
     tipo = ''
-    
+
 
     return tipo
 
