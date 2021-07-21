@@ -74,7 +74,9 @@ def main() -> None:
                 filtros_deseados.append(tipo)
 
         if opcion == 2:
-            pass
+            nombre_archivos = input('Ingresa el nombre: ')
+            filtros_deseados.append(nombre_archivos)
+            
         elif opcion != 3:
             print('Opción inválida, volvé a intentar')
 
