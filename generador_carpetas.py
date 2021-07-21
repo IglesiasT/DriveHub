@@ -6,10 +6,28 @@ import archivos
 # CSV del matcheo, cada linea:   PADRON, Apellido_profe
 # Info_alumno sale del mail: [ PADRON , APELLIDO NOMBRE , <direccion.zip>]
 # [ PADRON , APELLIDO NOMBRE , <direccion.zip>, direccion_carpeta_alumno]
+# Windows: "C:\Users\Nombre_usuario\Desktop
+# Linux: "\home\nombre_usuario\desktop
+
 
 OS = platform.system()
 CADENA = "\ "
 BARRA = CADENA[0]
+
+
+# ### Prestado de Ro ###
+
+
+def listar_carpetas(ruta_dir: str) -> list:
+    lista_carpetas = []
+    for contenido in os.listdir(ruta_dir):
+        ruta_completa = os.path.join(ruta_dir, contenido)
+        if os.path.isdir(ruta_completa):
+            lista_carpetas.append(contenido)
+    return lista_carpetas
+
+
+# #########################
 
 
 def generador_carpeta_zip() -> None:
@@ -39,15 +57,25 @@ def generador_carpeta(nombre_carpeta: str) -> None:
             pidiendo_nombre = False
 
 
+def averiguar_usuario(opciones: list) -> str:
+    buscando = True
+    USUARIO = ""
+    for carpeta in opciones:
+        if buscando and os.path.isdir("C:/Users/" + carpeta + "/Desktop"):
+            pregunta = input(f"Tu usuario es {carpeta}? (s/n): ")
+            if pregunta == "s":
+                buscando = False
+                USUARIO = carpeta
+    return USUARIO
+
+
 def ruta_desk_w() -> str:
-    ruta = os.getcwd()
-    divisiones = ruta.split(BARRA)
-    ruta_escritorio = []
-    for i in range(3):
-        ruta_escritorio.append(divisiones[i])
-    ruta_escritorio.append("Desktop")
-    ruta = BARRA.join(ruta_escritorio)
-    return ruta + BARRA
+    ruta_base = r"C:\Users"
+    opciones = listar_carpetas(ruta_base)
+    USUARIO = averiguar_usuario(opciones)
+    ruta_desktop = "C:/Users/" + USUARIO + "/desktop/"
+    os.mkdir(ruta_desktop + "Carla")
+    return ruta_desktop
 
 
 def generador_ruta(sistema_actual: str) -> str:
@@ -73,13 +101,22 @@ def remover_comillas(palabra: str) -> str:
 
 def info_matcheo(padron: str, matcheo: str) -> str:
     profe = ""
-    with open(matcheo, "r") as archivo:
-        for linea in archivo:
-            linea = linea.rstrip()
-            if padron in linea:
-                data_match = linea.split(",")
-                profe = data_match[1]
-                profe = remover_comillas(profe)
+    with open(matcheo, mode='r', newline='', encoding="UTF-8") as alumnos_csv:
+        csv_reader = csv.reader(alumnos_csv, delimiter=',')
+        next(csv_reader)
+        for row in csv_reader:
+            padron_csv = row[0]
+            nombre_apellido_csv = row[1]
+            if ((padron in padron_csv) and (nom_apellido == nombre_apellido_csv)):
+                existe = True
+
+    # with open(matcheo, "r") as archivo:
+    #     for linea in archivo:
+    #         linea = linea.rstrip()
+    #         if padron in linea:
+    #             data_match = linea.split(",")
+    #             profe = data_match[1]
+    #             profe = remover_comillas(profe)
     return profe
 
 
@@ -124,11 +161,7 @@ def crear_carpetas(info_alumno: list) -> None:
     print(ubicacion_zip)
     archivos.descomprimir_archivo(ubicacion_zip, path)
 
-# def main():
-#     ruta = ruta_desk_w() + "107789 - Ebbes, Gonzalo" + BARRA + "107789 - Ebbes, Gonzalo.zip"
-#     info_alumno = ["107635", "Nicolas Puccar", ruta]
-#     crear_carpetas(info_alumno)
-# main()
+
 def desempaquetar_orden(comando: str) -> list:
     partes = comando.split(" - ")
     return partes
@@ -141,25 +174,26 @@ def conseguir_usuario() -> str:
     return usuario
 
 
-def ejecutar_comandos() -> None:
-    exit = False
-    ruta = ""
-    # print reglas comando
-    usuario = conseguir_usuario()
-    while not exit:
-        # listar opciones
-        comando = input(f"{usuario}: ")
-        orden = desempaquetar_orden(comando)
-        if orden[0] == "cd":
-            if orden[1] == ".."
-                # def borrar ultima ruta
-            else:
-                # redefinir ruta y
-        elif orden[0] == "mk":
-            # Crear carpeta o archivo
-        elif orden[0] == "help":
-            # printear reglas comando
-        elif orden[0] == "exit":
-            exit = True
-        else:
-            print("El comando es invalido, si necesita ayuda utilice 'help' ")
+# def ejecutar_comandos() -> None:
+#     exit = False
+#     ruta = ""
+#     # print reglas comando
+#     usuario = conseguir_usuario()
+#     while not exit:
+#         # listar opciones
+#         comando = input(f"{usuario}: ")
+#         orden = desempaquetar_orden(comando)
+#         if orden[0] == "cd":
+#             if orden[1] == ".."
+#                 # def borrar ultima ruta
+#             else:
+#                 # redefinir ruta y
+#         elif orden[0] == "mk":
+#             # Crear carpeta o archivo
+#         elif orden[0] == "help":
+#             # printear reglas comando
+#         elif orden[0] == "exit":
+#             exit = True
+#         else:
+#             print("El comando es invalido, si necesita ayuda utilice 'help' ")
+ruta_desk_w()
