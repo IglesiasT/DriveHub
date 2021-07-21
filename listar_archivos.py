@@ -25,32 +25,23 @@ def busqueda_por_filtros(filtros : list):
             break
 
 def main() -> None:
-    filtros_posibles = ('Tipo', 'Nombre')
-    filtros_deseados = set()
+    filtros_deseados = []
     opcion = None
 
     print('----- Listado de archivos y carpetas -----')
     
-    while opcion != len(filtros_posibles):
-        
-        for i in range(len(filtros_posibles)):  #Muestro opciones al usuario
-            print(f'{i} - {filtros_posibles[i]}')
-        print(f'{len(filtros_posibles)} - Salir')
+    while opcion != 3:
+        print('Elige un filtro, si no deseas ninguno elige Salir')
+        print('1 - Tipo\n2 - Nombre\n3 - Salir')
+        opcion = int(input('\nFiltro deseado: '))
 
-        try:
-            opcion = int(input('Introduce el número asociado al filtro deseado, si no deseas filtrar introduce Salir'))
-            filtros_deseados.add(filtros_posibles[opcion])
-            print(f'Filtros establecidos: {filtros_deseados}')
-
-        except IndexError:
-            print('Opción inválida, debes introducir el numero asociado al filtro deseado')
-        
-        except TypeError:
-            print('Debes introducir un número')
-
-        except:
-            print('Algo salió mal volvé a intentar')   
-
+        if opcion == 1:
+            pass
+        if opcion == 2:
+            pass
+        else:
+            print('Opción inválida, volvé a intentar')
+            
     busqueda_por_filtros(filtros_deseados)
 
 main()
