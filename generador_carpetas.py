@@ -57,7 +57,7 @@ def generador_carpeta(nombre_carpeta: str) -> None:
             pidiendo_nombre = False
 
 
-def averiguar_usuario(opciones: list) -> str:
+def averiguar_usuario_w(opciones: list) -> str:
     buscando = True
     USUARIO = ""
     for carpeta in opciones:
@@ -72,9 +72,28 @@ def averiguar_usuario(opciones: list) -> str:
 def ruta_desk_w() -> str:
     ruta_base = r"C:\Users"
     opciones = listar_carpetas(ruta_base)
-    USUARIO = averiguar_usuario(opciones)
+    USUARIO = averiguar_usuario_w(opciones)
     ruta_desktop = "C:/Users/" + USUARIO + "/desktop/"
-    os.mkdir(ruta_desktop + "Carla")
+    return ruta_desktop
+
+
+def averiguar_usuario_linux(opciones: list) -> str:
+    buscando = True
+    USUARIO = ""
+    for carpeta in opciones:
+        if buscando and os.path.isdir("/home/" + carpeta + "/Desktop"):
+            pregunta = input(f"Tu usuario es {carpeta}? (s/n): ")
+            if pregunta == "s":
+                buscando = False
+                USUARIO = carpeta
+    return USUARIO
+
+
+def ruta_desk_linux() -> str:
+    ruta_base = r"/home"
+    opciones = listar_carpetas(ruta_base)
+    USUARIO = averiguar_usuario_linux(opciones)
+    ruta_desktop = "/home/" + USUARIO + "/desktop/"
     return ruta_desktop
 
 
@@ -163,13 +182,6 @@ def crear_carpetas(info_alumno: list) -> None:
 def desempaquetar_orden(comando: str) -> list:
     partes = comando.split(" - ")
     return partes
-
-
-def conseguir_usuario() -> str:
-    ruta = os.getcwd()
-    partes = BARRA.split(ruta)
-    usuario = partes[2]
-    return usuario
 
 
 # def ejecutar_comandos() -> None:
