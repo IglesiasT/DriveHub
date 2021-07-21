@@ -9,11 +9,14 @@ DATOS_FILTROS = {
 
 def pedir_tipo() -> str:
     """
+    Muestra un menu al usuario y le permite escoger el tipo de archivo por el cual
+    desea filtrar
+    POST: Valida la entrada y devuelve una cadena con la opcion elegida
     """
     tipo = ''
     opcion = None
 
-    while opcion != 4:
+    while opcion != 4:  #optimizar esto y hacerlo escalable
         print('Ingresa el tipo de archivos que deseas ver')
         print('1 - Imagenes\n2 - Videos\n3 - Carpetas\n4 - Volver')
         opcion = int(input('\nIngresa una opción: '))
