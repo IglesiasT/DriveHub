@@ -37,9 +37,19 @@ def main() -> None:
             print(f'{i} - {filtros_posibles[i]}')
         print(f'{len(filtros_posibles)} - Salir')
 
-        opcion = int(input('Introduce el número asociado al filtro deseado, si no deseas filtrar introduce Salir'))
+        try:
+            opcion = int(input('Introduce el número asociado al filtro deseado, si no deseas filtrar introduce Salir'))
+            filtros_deseados.add(filtros_posibles[opcion])
+            print(f'Filtros establecidos: {filtros_deseados}')
+
+        except IndexError:
+            print('Opción inválida, debes introducir el numero asociado al filtro deseado')
         
-        
+        except TypeError:
+            print('Debes introducir un número')
+
+        except:
+            print('Algo salió mal volvé a intentar')   
 
     busqueda_por_filtros(filtros_deseados)
 
