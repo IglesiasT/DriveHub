@@ -10,9 +10,25 @@ DATOS_FILTROS = {
 def pedir_tipo() -> str:
     """
     """
-
     tipo = ''
+    opcion = None
 
+    while opcion != 4:
+        print('Ingresa el tipo de archivos que deseas ver')
+        print('1 - Imagenes\n2 - Videos\n3 - Carpetas\n4 - Volver')
+        opcion = int(input('\nIngresa una opción: '))
+
+        if opcion == 1:
+            tipo = 'Imagenes'
+        
+        if opcion == 2:
+            tipo = 'Videos'
+
+        if opcion == 3:
+            tipo = 'Carpetas'
+        
+        elif opcion != 4:
+            print('Opción inválida, volvé a intentar')
 
     return tipo
 
@@ -50,7 +66,9 @@ def main() -> None:
         opcion = int(input('\nFiltro deseado: '))
 
         if opcion == 1:
-            filtros_deseados.append(pedir_tipo())
+            tipo = pedir_tipo()
+            if tipo:    #Valido de no agregar la cadena vacía
+                filtros_deseados.append(tipo)
 
         if opcion == 2:
             pass
