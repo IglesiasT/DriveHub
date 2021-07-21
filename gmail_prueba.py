@@ -94,7 +94,7 @@ def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool, boolean
     raw_string = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
     #message = servicio.users().messages().send(userId='me', body={'raw': raw_string}).execute()
 
-def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict, lista : list,archivo_ruta : str):
+def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict, lista : list,archivo_ruta : str,ruta_evaluaciones:str):
     
     flag = evaluar_padron(padron,alumnos)
     if flag == True:
@@ -139,9 +139,9 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
             
             OS = generador_carpetas.platform.system()
            
-            path = generador_carpetas.generador_ruta(OS) 
+            path = generador_carpetas.generador_ruta_base(OS) 
             print("path: ",path)
-            generador_carpetas.crear_carpetas(lista)
+            generador_carpetas.crear_carpetas(lista,ruta_evaluaciones)
 
         if booleano == False:
             pass
@@ -171,7 +171,7 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
         generar_mensaje(correo_recibido,servicio,flag,booleano)
         print("el asunto del mail fue enviado incorrectamente")
 
-def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : dict, archivo_ruta : str):
+def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : dict, archivo_ruta : str, ruta_evaluaciones : str):
 
     correo_recibido = servicio.users().messages().get(userId = 'me', id = correo).execute()
     nombre = correo_recibido["payload"]["headers"][19]["value"]
@@ -181,7 +181,7 @@ def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : 
         codeo = lista[0]
         padron = codeo.strip()
         if padron.isnumeric():
-            guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos,lista,archivo_ruta)
+            guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos,lista,archivo_ruta,ruta_evaluaciones)
         else:
             print("no sirve tampoco")
 
@@ -191,6 +191,8 @@ def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : 
 def main():
     
     archivo_ruta = generador_carpetas.generador_carpeta_zip()
+
+    ruta_evaluacion = generador_carpetas.carpeta_evaluaciones()
 
     alumnos = evaluar_alumnos()  
 
@@ -205,6 +207,6 @@ def main():
     identificados = detectar_gmails(recibidos)
 
     for correo in identificados:
-        recibir_archivos(servicio,correo,alumnos,recibidos,archivo_ruta)
+        recibir_archivos(servicio,correo,alumnos,recibidos,archivo_ruta,ruta_evaluacion)
     
 main()
