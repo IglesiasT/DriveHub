@@ -25,12 +25,12 @@ def mostrar_menu(lugar: str)->None:
     if lugar == "drivehub":
         print("\nMenu del DriveHub:")
         print("1-Mostrar archivos\n2-Crear archivo o carpeta\n3-Subir archivo\n4-Descargar archivo")
-        print("5-Sincronizar")
+        print("5-Sincronizar\n6-volver al menu principal")
         print("M-mostrar menu\nS-Salir")
     elif lugar == "local":
         print("\nMenu local:")
         print("1-Descargar eveluciones de alumnos\n2-Mostrar archivos\n3-Crear archivo o carpeta\n4-Subir archivo")
-        print("\n5-Sincronizar")
+        print("5-Sincronizar\n6-volver al menu principal")
         print("M-mostrar menu\nS-Salir")
     else:
         print("\nMenu: \nR-Archivos del DriveGit\nL-Archivos locales\nM-mostrar menu\nS-Salir")  
@@ -45,7 +45,7 @@ def definir_lugar(opc: str)->str:
         lugar = "drivehub"
     elif opc in "L":
         lugar = "local"
-    elif (opc ):
+    elif (opc != "L" ) and (opc != "R"):
         lugar = "principales"
     return lugar
 
@@ -71,8 +71,8 @@ def main()->None:
     OS = platform.system()
     listas_opciones= {  #Son las opcciones que puede elegir el usurio dependiendo de cada menu
         "principales":["R","L","S","M"],
-        "local":["1","2","3","4","5", "6","S","M"],
-        "drivehub":["1","2","3","4","S","M"]
+        "local":["1","2","3","4","5","6","S","M"],
+        "drivehub":["1","2","3","4","5","6","S","M"]
     }
     lugar = ""  #El lugar puede ser local o en el drivehub
     mostrar_menu(lugar)
@@ -98,9 +98,6 @@ def main()->None:
             if (opc in "4"): #Subir archivo
                 print("Subir archivo")
 
-            if (opc in "5"): #Sincronizar
-                print("Sincronizar")
-
         if (lugar == "drivehub"): 
             if (opc in "1"): #Mostrar archivos
                 print("Mostrar archivos")
@@ -114,15 +111,19 @@ def main()->None:
             if (opc in "4"): #Descargar archivo
                 print("Descargar archivo")
 
-            if (opc in "5"): #Sincronizar
-                print("Sincronizar")
+        if (opc in "5"): #Sincronizar
+            print("Sincronizar")
+
+        if(opc == "6"):
+            lugar = "principales"
 
         if (opc in "M"):
             mostrar_menu(lugar)
 
         opc = validar_opcion(listas_opciones[lugar])
+
         if (opc in "R") or (opc in "L"):
-            definir_lugar(opc)
+            lugar = definir_lugar(opc)
     escritorio = generador_carpetas.generador_ruta_base(OS) 
     existe = archivos.verificar_archivo_directorio(escritorio , "descargas_zip") #verifica si la carpeta descarga exista
     if existe:
