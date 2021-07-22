@@ -27,7 +27,12 @@ import archivos
 
 # ["123654 " , Nicolas Puccar]
 
-def evaluar_alumnos():
+def evaluar_alumnos()->list:
+    """
+    se devolvera una lista conformada con listas de 2 constantes donde se identificara el 
+    padron del alumno seguido del profesor asignado " [ 125463 , leo chaves ]"
+    """
+
     cursantes = "alumnos_profesores.csv"
 
     datos = list()
@@ -40,7 +45,12 @@ def evaluar_alumnos():
     return datos
 
 
-def detectar_gmails(recibidos):
+def detectar_gmails(recibidos : dict)->list:
+    """
+    pre : recibe un diccionario con los mensajes recibidos por la cuenta en INBOX
+
+    post: devuelve una lista con todos los ID recibidos
+    """
 
     identificados = []
 
@@ -55,7 +65,12 @@ def detectar_gmails(recibidos):
 
     return identificados
 
-def generar_codigo(servicio : dict , correo_recibido : dict, recibidos : dict):
+def generar_codigo(servicio : dict , correo_recibido : dict, recibidos : dict)->str:
+    """
+    pre: recibe el servicio de gmail, el correo recibido/a evaluar y los emails recibidos
+
+    post : devuelve un str en bytes simbolizando el archivo adjunto enviado por el usuario
+    """
 
     mensaje_id = recibidos["messages"][0]["id"]
     contenido_id = correo_recibido["payload"]["parts"][1]["body"]["attachmentId"]
@@ -66,7 +81,12 @@ def generar_codigo(servicio : dict , correo_recibido : dict, recibidos : dict):
     return codigo
 
 
-def evaluar_padron(padron : str, alumnos : dict):
+def evaluar_padron(padron : str, alumnos : dict)->bool:
+    """
+    pre: recibe el padron del asunto del mail y una lista con listas que contienen los padrones y sus respectivos correctores
+
+    post: devuelve un booleano que representa si el padron pertenece o no a la lista de alumnos
+    """
 
     flag = False
 
@@ -76,27 +96,47 @@ def evaluar_padron(padron : str, alumnos : dict):
         
     return flag
 
-def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool):
+def generar_mensaje(correo_recibido : dict, servicio : dict,flag : bool, booleano : bool)->None:
+    """
+    pre : recibe el ID del correo recibido/a analizar, el servicio de gmail, un booleano que representa que el padron pertenece
+    al de uno de los alumnos cursantes y otro booleano que representa que el archivo recibido es correcto
+
+    post: envia un email informando sobre el estado de su entrega
+    """
 
     destinatario = correo_recibido["payload"]["headers"][6]["value"]
+
     if flag == True:
-        emailMsg = "su correo fue recibido correctamente"
+
+        if booleano == True:
+            emailMsg = "su correo fue recibido correctamente"
+
+        elif booleano == False:
+            emailMsg = "el archivo adjunto no es correcto, envie nuevamente el mail con el archivo correcto"
+
     elif flag == False:
         emailMsg = "el padron es incorrecto, envie el email con el padron correcto"
+
     mimeMessage = MIMEMultipart()
     mimeMessage['to'] = destinatario
     nombre = correo_recibido["payload"]["headers"][19]["value"]
     mimeMessage['subject'] = nombre
     mimeMessage.attach(MIMEText(emailMsg, 'plain'))
     raw_string = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
-    #message = servicio.users().messages().send(userId='me', body={'raw': raw_string}).execute()
+    message = servicio.users().messages().send(userId='me', body={'raw': raw_string}).execute()
 
-def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict, lista : list,archivo_ruta : str):
+def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servicio : dict, recibidos : dict, lista : list,archivo_ruta : str,ruta_evaluaciones:str)->None:
+    """
+    pre : recibe el ID del correo recibido/a analizar, el padron recibido del asunto del gmail, una lista con listas que contienen los padrones y sus respectivos correctores, 
+    el servicio de gmail, un diccionario con los mensajes recibidos por la cuenta en INBOX, una lista que contiene el padron y el nombre enunciado en el asunto, un str representando
+    la ruta de los zip y un str representando la carpeta ruta donde iran las evaluaciones
+
+    post : en caso de ser los datos del asunto correcto y el archivo adjunto ser correcto, enviara el adjunto a las carpetas ruta y se le informara mediante mail,
+    en caso de haber algun dato erroneo, se le informara mediante mail para que reenvie el mail con los respectivos cambios
+    """
 
     flag = evaluar_padron(padron,alumnos)
     if flag == True:
-
-        # archivos = generar_carpeta() funcion para generar una carpeta
 
         CADENA = "\ "
 
@@ -111,41 +151,51 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
         
         booleano = archivos.verificar_zip(ruta_zip)
         print(booleano)
+ 
+        if booleano == True:
+            
+            #print("el mail es correcto")
+            generar_mensaje(correo_recibido,servicio,flag,booleano)
+            codigo = generar_codigo(servicio, correo_recibido, recibidos)
+            descripcion = correo_recibido["payload"]["parts"][1]["filename"]
+            with open(descripcion, 'wb') as f:
+                f.write(codigo)
+            try:
+                shutil.move(descripcion, archivo_ruta)
+            except:
+                print()
+                print("el archivo ya existe")
 
-        # funcion verificar_zip( ruta_zip ) devuelve booleano
+            generar_mensaje(correo_recibido,servicio,flag,booleano)
 
-        """
-        if bool == True:
-
-            pasar cosas a gonza y enviar mensaje de confirmacion
+            #pasar cosas a gonza y enviar mensaje de confirmacion
 
             lista.append( ruta_zip ) 
+            print(lista)
+            
+            OS = generador_carpetas.platform.system()
+           
+            path = generador_carpetas.generador_ruta_base(OS) 
+            print("path: ",path)
+            generador_carpetas.crear_carpetas(lista,ruta_evaluaciones)
 
-            [ 123654 , puccar nicolas , <direccion>( ruta_zip)]
+        if booleano == False:
+            #print("el mail no es correcto")
+            generar_mensaje(correo_recibido,servicio,flag,booleano)
 
-        if bool == False:
-
-            pasar mensaje de que lo hiciste mal pibe 
-
-        """
-
-        print("el mail es correcto")
-        generar_mensaje(correo_recibido,servicio,flag)
-        codigo = generar_codigo(servicio, correo_recibido, recibidos)
-        descripcion = correo_recibido["payload"]["parts"][1]["filename"]
-        with open(descripcion, 'wb') as f:
-            f.write(codigo)
-        try:
-            shutil.move(descripcion, archivo_ruta)
-        except:
-            print()
-            print("el codigo ya existe")
     elif flag == False:     
         #messages = serviciousers().messages().get(userId = 'me').execute()
-        generar_mensaje(correo_recibido,servicio,flag)
-        print("el asunto del mail fue enviado incorrectamente")
+        booleano = False
+        generar_mensaje(correo_recibido,servicio,flag,booleano)
+        #print("el asunto del mail fue enviado incorrectamente")
 
-def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : dict, archivo_ruta : str):
+def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : dict, archivo_ruta : str, ruta_evaluaciones : str)->None:
+    """
+    pre : recibe el servicio de gmail, el ID del correo a evaluar, la lista de alumnos cursantes, un diccionario con los mail recibidos de INBOX, y 2 str 
+    representando la carptea ruta de los zip y de las evaluaciones respectivamente
+
+    post : en caso de ser un mail que sea de evaluacion del respectivo trabajo, se mandara a evaluar su formato, en caso de no ser parte de la evaluacion, se ovbiara
+    """
 
     correo_recibido = servicio.users().messages().get(userId = 'me', id = correo).execute()
     nombre = correo_recibido["payload"]["headers"][19]["value"]
@@ -155,16 +205,18 @@ def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : 
         codeo = lista[0]
         padron = codeo.strip()
         if padron.isnumeric():
-            guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos,lista,archivo_ruta)
+            guardar_archivo(correo_recibido,padron,alumnos,servicio,recibidos,lista,archivo_ruta,ruta_evaluaciones)
         else:
             print("no sirve tampoco")
 
     else:
         print("no sirve")
 
-def main():
+def inicio_gmail():
     
     archivo_ruta = generador_carpetas.generador_carpeta_zip()
+
+    ruta_evaluacion = generador_carpetas.carpeta_evaluaciones()
 
     alumnos = evaluar_alumnos()  
 
@@ -174,11 +226,10 @@ def main():
 
     #labels = servicio.users().labels().get(userId = 'me', id = "INBOX").execute()
 
-    recibidos = servicio.users().messages().list(userId = 'me', labelIds = "INBOX").execute()#,q = "after : 1624987804 before : 1626030000" 
+    recibidos = servicio.users().messages().list(userId = 'me', labelIds = "INBOX", maxResults = 500).execute()#,q = "after : 1624987804 before : 1626030000" 
 
     identificados = detectar_gmails(recibidos)
 
     for correo in identificados:
-        recibir_archivos(servicio,correo,alumnos,recibidos,archivo_ruta)
+        recibir_archivos(servicio,correo,alumnos,recibidos,archivo_ruta,ruta_evaluacion)
     
-main()
