@@ -46,6 +46,11 @@ def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     archivo_zip.close
 
 def eleccion_tipo_archivos()->str:
+    """
+    Pre-condicion: ninguna
+    Post-condicion: devuelve el tipo de archivo como string
+    Se le pide el tipo de archivo al usuario
+    """
     print("\n")
     tipo = input("Elija si crear un archivo .Json = j | .CSV = c | .text = t: ").upper()
     eleccion = funciones_generales.verificar_pregunta_sino("¿Seguro que es el archivo que desea? Si = si |No = no: ").upper()
@@ -55,17 +60,34 @@ def eleccion_tipo_archivos()->str:
     
     return tipo
 
-def crear_archivo():
+def crear_archivo(ruta_carpeta: str)->None:
+    """
+    Pre-condicion: (ruta_del_directorio: str)
+    Post-condicion: no devulve nada
+    Crear un archivo, del tipo y nombre que el usuario le indique
+    """
     tipo = eleccion_tipo_archivos()
-    nombre = funciones_generales.eleccion_nombre("Ingrese el nombre del archivo: ")
-    if tipo in "T":
-        nombre = nombre +".txt"
-    if tipo in "C":
-        nombre = nombre +".csv"
-    if tipo in "J":
-        nombre = nombre +".json"
-    open(nombre, "w").close()
-
+    pidiendo_nombre = True
+    while pidiendo_nombre:
+        try:
+            nombre = funciones_generales.eleccion_nombre("Ingrese el nombre del archivo: ")
+        except IOError:
+            if(verificar_archivo_directorio(ruta_carpeta, nombre) == True):
+                nombre = input("El archivo ya existe, ingrese otro nombre o Exit para cancelar: ")
+                if nombre_carpeta == "Exit":
+                    pidiendo_nombre = False
+            else:
+                nombre_carpeta = input("El nombre ingresado contiene caracteres invalidos,"
+                                       " por favor intente de nuevo: ")
+        else:   
+            if tipo in "T":
+                nombre = nombre +".txt"
+            if tipo in "C":
+                nombre = nombre +".csv"
+            if tipo in "J":
+                nombre = nombre +".json"
+            open(nombre, "w").close()
+            print("Se creo el archivo correctamente")
 
 def listar_directorio(ruta_dir: str)->None:
     """
@@ -109,6 +131,11 @@ def verificar_archivo_directorio(ruta_dir: str, archivo: str)->bool:
     return existe
 
 def fecha_modificacion(ruta_archivo: str)-> str:
+    """
+    Pre-condicion: (ruta_del_archivo: str)
+    Post-condicion: devuelve un string con la fecha, hora de la modificacion
+    Indica cuando se hizo la modificacion de un archivo
+    """
     modificacion = time.ctime(os.path.getmtime(ruta_archivo))
     print("mod: ", modificacion)
     return modificacion
