@@ -53,7 +53,7 @@ def listar_directorio(ruta_dir: str)->None:
     for i in range(len(contenido)):
         print(contenido[i])
 
-def listar_carpetas(ruta_dir: str, printear: bool)-> list:
+def listar_carpetas(ruta_dir: str, printear = False)-> list:
     """
     Pre-condicion: (ruta_del_directorio: str, printeo: str)
     Post-condicion: devuelve el nombre de las carpetas(tipo list)
