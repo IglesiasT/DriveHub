@@ -124,7 +124,6 @@ def verificar_archivo_directorio(ruta_dir: str, archivo: str)->bool:
     contenido = os.listdir(ruta_dir)
     existe = False
     for i in range(len(contenido)):
-        print(contenido[i])
         if archivo in contenido[i]:
             existe = True  
 

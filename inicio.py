@@ -3,7 +3,8 @@ import os
 import generador_carpetas
 import archivos
 import funciones_generales
-
+import shutil
+import platform
 def validar_opcion(lista: list)->str:
     """
     Pre-condicion: (lista_de_opciones: list)
@@ -67,25 +68,26 @@ def carpeta_o_archivo()->bool:
 
 def main()->None:
     CARPETA_ACTUAL = os.getcwd()
-    listas_opciones= {
+    OS = platform.system()
+    listas_opciones= {  #Son las opcciones que puede elegir el usurio dependiendo de cada menu
         "principales":["R","L","S","M"],
         "local":["1","2","3","4","5", "6","S","M"],
         "drivehub":["1","2","3","4","S","M"]
     }
-    lugar = ""
+    lugar = ""  #El lugar puede ser local o en el drivehub
     mostrar_menu(lugar)
     opc = validar_opcion(listas_opciones["principales"])
     lugar = definir_lugar(opc)
     
     while opc != "S":
         if (lugar == "local"):
-            if (opc in "1"):
+            if (opc in "1"): #Descargar eveluciones de alumnos
                 gmail_prueba.inicio_gmail()
 
-            if (opc in "2"):
+            if (opc in "2"): #Mostrar archivos
                 archivos.listar_directorio(CARPETA_ACTUAL)
 
-            if (opc in "3"):
+            if (opc in "3"): #Crear archivo o carpeta
                 carpeta = carpeta_o_archivo()
                 if carpeta == True:
                     nombre = funciones_generales.eleccion_nombre("Ingrese el nombre de la carpeta: ")
@@ -93,28 +95,27 @@ def main()->None:
                 else:
                     archivos.crear_archivo(CARPETA_ACTUAL)
 
-            if (opc in "4"):
+            if (opc in "4"): #Subir archivo
                 print("Subir archivo")
 
-            if (opc in "5"):
+            if (opc in "5"): #Sincronizar
                 print("Sincronizar")
 
-        if (lugar == "drivehub"):
-            if (opc in "1"):
+        if (lugar == "drivehub"): 
+            if (opc in "1"): #Mostrar archivos
                 print("Mostrar archivos")
 
-            if (opc in "2"):
+            if (opc in "2"): #Crear archivos
                 print("Crear archivos")
 
-            if (opc in "3"):
+            if (opc in "3"): #Subir archivo
                 print("Subir archivo")
 
-            if (opc in "4"):
+            if (opc in "4"): #Descargar archivo
                 print("Descargar archivo")
 
-            if (opc in "5"):
+            if (opc in "5"): #Sincronizar
                 print("Sincronizar")
-
 
         if (opc in "M"):
             mostrar_menu(lugar)
@@ -122,6 +123,10 @@ def main()->None:
         opc = validar_opcion(listas_opciones[lugar])
         if (opc in "R") or (opc in "L"):
             definir_lugar(opc)
+    escritorio = generador_carpetas.generador_ruta_base(OS) 
+    existe = archivos.verificar_archivo_directorio(escritorio , "descargas_zip") #verifica si la carpeta descarga exista
+    if existe:
+        shutil.rmtree(escritorio + "descargas_zip")   #borra la carpeta descargas
 
 main()
 
