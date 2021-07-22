@@ -2,6 +2,8 @@ import platform
 import os
 import archivos
 import csv
+import shutil
+
 
 # Recibo estructura del estilo:
 # CSV del matcheo, cada linea:   PADRON, Apellido_profe
@@ -12,37 +14,19 @@ import csv
 
 
 OS = platform.system()
-CADENA = "\ "
-BARRA = CADENA[0]
-
-
-def crear_carpeta(ruta_actual: str) -> None:
-    os.mkdir(ruta_actual)
-
-
-def listar_carpetas(ruta_dir: str, printear = False) -> list:
-    lista_carpetas = []
-    for contenido in os.listdir(ruta_dir):
-        ruta_completa = os.path.join(ruta_dir, contenido)
-        if os.path.isdir(ruta_completa):
-            lista_carpetas.append(contenido)
-            if printear:
-                print(contenido)
-    return lista_carpetas
-
-
-# #########################
 
 
 def generador_carpeta_zip() -> None:
-    ruta = ruta_desk_w()
-    if not os.path.isdir(ruta + "descargas.zip"):
-        os.mkdir(f"{ruta}descargas_zip")
-    ruta = ruta + "descargas_zip" + BARRA
-    return ruta
+    ruta_desk = generador_ruta_base(OS)
+    if not os.path.isdir(ruta_desk + "descargas.zip"):
+        os.mkdir(f"{ruta_desk}descargas_zip")
 
 
 def generador_carpeta(nombre_carpeta: str, ruta_base: str) -> None:
+    """
+    PRE  : ruta_base debe ser un directorio valido
+    POST : crea la carpeta en el directorio, si el nombre elegido es invalido o existe, se pide otro
+    """
     pidiendo_nombre = True
     while pidiendo_nombre:
         try:
@@ -61,19 +45,31 @@ def generador_carpeta(nombre_carpeta: str, ruta_base: str) -> None:
 
 
 def averiguar_usuario_w(opciones: list) -> str:
+    """
+    PRE  : Opciones es la lista de carpetas contenidas dentro de C:\users de la cual se filtraran solo
+           los que sean posibles nombres de usuario
+    POST : Segun el usuario, la funcion devolvera el nombre del usuario elegido
+    """
     buscando = True
-    USUARIO = ""
-    carpetas_inutiles = ["All Users", "Default", "Default User", "Public"]
-    for carpeta in opciones:
-        if buscando and os.path.isdir("C:/Users/" + carpeta + "/Desktop") and carpeta not in carpetas_inutiles:
-            pregunta = input(f"Tu usuario es {carpeta}? (s/n): ")
-            if pregunta == "s":
-                buscando = False
-                USUARIO = carpeta
+    usuarios = []
+    carpetas_inutiles = ["All Users", "Default", "Default User", "Public"]  # Carpetas predeteminadas y no de
+    for carpeta in opciones:                                                # usuarios, de windows
+        if carpeta in carpetas_inutiles:
+            usuarios.append(carpeta)
+    while buscando:
+        for usuario in usuarios:
+            if os.path.isdir("C:/Users/" + usuario + "/Desktop"):
+                pregunta = input(f"Tu usuario es {usuario}? (s/n): ")
+                if pregunta == "s":
+                    buscando = False
+                    USUARIO = usuario
     return USUARIO
 
 
 def ruta_desk_w() -> str:
+    """
+    POST : La funcion devolvera un path en formato string, que lleva al escritorio de un usuario de windows
+    """
     ruta_base = r"C:\Users"
     opciones = archivos.listar_carpetas(ruta_base)
     USUARIO = averiguar_usuario_w(opciones)
@@ -82,18 +78,31 @@ def ruta_desk_w() -> str:
 
 
 def averiguar_usuario_linux(opciones: list) -> str:
+    """
+        PRE  : Opciones es la lista de carpetas contenidas dentro de /home de la cual se filtraran solo
+               los que sean posibles nombres de usuario
+        POST : Segun el usuario, la funcion devolvera el nombre del usuario elegido
+        """
     buscando = True
-    USUARIO = ""
+    usuarios = []
+    carpetas_inutiles = ["All Users", "Default", "Default User", "Public"]
     for carpeta in opciones:
-        if buscando and os.path.isdir("/home/" + carpeta + "/Desktop/"):
-            pregunta = input(f"Tu usuario es {carpeta}? (s/n): ")
-            if pregunta == "s":
-                buscando = False
-                USUARIO = carpeta
+        if carpeta in carpetas_inutiles:
+            usuarios.append(carpeta)
+    while buscando:
+        for usuario in usuarios:
+            if os.path.isdir("/home/" + usuario + "/Desktop"):
+                pregunta = input(f"Tu usuario es {usuario}? (s/n): ")
+                if pregunta == "s":
+                    buscando = False
+                    USUARIO = usuario
     return USUARIO
 
 
 def ruta_desk_linux() -> str:
+    """
+    POST : La funcion devolvera un path en formato string, que lleva al escritorio de un usuario de linux
+    """
     ruta_base = r"/home"
     opciones = archivos.listar_carpetas(ruta_base)
     USUARIO = averiguar_usuario_linux(opciones)
@@ -102,6 +111,10 @@ def ruta_desk_linux() -> str:
 
 
 def generador_ruta_base(sistema_actual: str) -> str:
+    """
+    PRE  : sistema actual solo puede ser las 3 opciones que devolveria el platform.system()
+    POST : La funcion devolvera la ruta al desktop del usuario, independientemente del sistema
+    """
     if sistema_actual == "Windows":
         ruta = ruta_desk_w()
     elif sistema_actual == "Linux":
@@ -115,6 +128,9 @@ def generador_ruta_base(sistema_actual: str) -> str:
 
 
 def remover_comillas(palabra: str) -> str:
+    """
+    POST : Si el string pasado como parametro tiene comillas, las removera, y lo devuelve sin comillas
+    """
     salida = ""
     for caracter in palabra:
         if caracter != '"':
@@ -123,7 +139,12 @@ def remover_comillas(palabra: str) -> str:
 
 
 def info_matcheo(padron: str, matcheo: str) -> str:
-    profe = ""
+    """
+    PRE  : Matcheo debe ser el nombre del archivo contra el que se quiere buscar el dato correspondiente
+    POST : Si el padron esta en el archivo, devuelve el nombre del profesor correspodiente,
+           si no lo tiene, quedara sin profesor
+    """
+    profe = "SIN_PROFE"
     with open(matcheo, mode='r', newline='', encoding="UTF-8") as archivo:
         csv_reader = csv.reader(archivo, delimiter=',')
         next(csv_reader)
@@ -138,12 +159,19 @@ def info_matcheo(padron: str, matcheo: str) -> str:
 
 
 def verificar_dir(direccion: str) -> str:
+    """
+    PRE  : Recibe un path en forma de string
+    POST : Si el path corresponde a una carpeta, la devolvera, sino, pedira otra hasta que sea una existente
+    """
     while not os.path.isdir(direccion):
         direccion = input("La ruta es incorrecta, intenta denuevo: ")
     return direccion
 
 
 def carpeta_evaluaciones() -> str:
+    """
+    POST : Ademas de crear la carpeta, devuelve el nombre del path donde se ubica
+    """
     existe = input("La carpeta de evaluaciones existe (1) o quieres crearla (2)? : ")
     if existe == "1":
         direccion = input("Cual es la ruta completa de la carpeta: ")
@@ -158,6 +186,11 @@ def carpeta_evaluaciones() -> str:
 
 
 def carpeta_docente(path: str, docente: str) -> str:
+    """
+    PRE  : Path debe ser una ruta de carpeta valida
+    POST : Creara la carpeta con el nombre del docente dentro del path especificado (Si es que no existe ya
+           la carpeta del docente) y devolvera la ruta de esa nueva carpeta
+    """
     if not os.path.isdir(path + docente):
         os.mkdir(path + docente)
     path = path + docente + "/"
@@ -165,6 +198,11 @@ def carpeta_docente(path: str, docente: str) -> str:
 
 
 def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
+    """
+    PRE  : Path debe ser una ruta valida de un directorio
+    POST : Creara la carpeta con el nombre del alumno y su padron, dentro del path especificado
+    (Si es que no existe ya la carpeta del alumno) y devolvera la ruta de esa nueva carpeta
+    """
     if not os.path.isdir(path + padron_alumno + alumno):
         os.mkdir(path + padron_alumno + alumno)
     path = path + padron_alumno + alumno
@@ -174,12 +212,14 @@ def carpeta_alumno(path: str, alumno: str, padron_alumno: str) -> str:
 def crear_carpetas(info_alumno: list, carpeta_evaluacion: str) -> None:
     """
     Aclaraciones extra de la funcion, el path se va actualizando a medida que se crean las carpetas
+    PRE  : Info alumnos debera contener un numero de padron, el nombre y apellido de ese alumno, y
+    la ruta donde se encuentra el archivo zip de su entrega
     """
     ubicacion_zip = info_alumno[2]
     archivo_matcheo = "alumnos_profesores.csv"
     padron_alumno = info_alumno[0]
     docente = info_matcheo(padron_alumno, archivo_matcheo)
-    nombre_alumno = "_" + info_alumno[1].replace(" ", "_")
+    nombre_alumno = "_" + info_alumno[1].replace(" ", "_")    # Dando un formato mas amigable
     path = carpeta_evaluacion
     path = carpeta_docente(path, docente)
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
