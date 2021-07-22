@@ -1,4 +1,4 @@
-from generador_carpetas import generador_carpeta, ruta_desk_w
+import inicio
 import io, os
 import googleapiclient.http
 from service_drive import obtener_servicio
@@ -50,7 +50,7 @@ def obtener_id(nombre_archivo : str) -> str:
     except:
         print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
 
-def descargar_archivo(id_archivo : str, nombre_archivo : str) -> None:
+def descargar_archivo(id_archivo : str, nombre_archivo : str, carpeta_actual : str) -> None:
     """
     PRE: Recibe una cadena con el id del archivo a descargar y su nombre
     POST: Crea una carpeta llamada Descargas Drive en el escritorio y guarda
@@ -58,8 +58,7 @@ def descargar_archivo(id_archivo : str, nombre_archivo : str) -> None:
     """
     #Localización de la descarga
     nombre_carpeta = 'Descargas Drive'
-    generador_carpeta(nombre_carpeta)    #Crea carpeta en escritorio donde voy a guardar el archivo
-    ruta = ruta_desk_w() + nombre_carpeta
+    ruta = os.path.join(carpeta_actual, nombre_carpeta)
 
     #Inicialización de la descarga
     solicitud_descarga = SERVICIO.files().get_media(fileId=id_archivo)
