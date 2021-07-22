@@ -1,4 +1,5 @@
-import inicio
+import generador_carpetas
+import archivos
 import io, os
 import googleapiclient.http
 from service_drive import obtener_servicio
@@ -50,16 +51,22 @@ def obtener_id(nombre_archivo : str) -> str:
     except:
         print('Archivo inválido. Corroborar que el nombre del archivo se encuentre en Drive del usuario.')
 
-def descargar_archivo(id_archivo : str, nombre_archivo : str, carpeta_actual : str) -> None:
+def descargar_archivo(id_archivo : str, nombre_archivo : str, ruta : str) -> None:
     """
-    PRE: Recibe una cadena con el id del archivo a descargar, su nombre y la carpeta
-    donde se encuentra para realizar la descarga
+    PRE: Recibe una cadena con el id del archivo a descargar, su nombre y la ruta
+    donde se realizara la descarga
     POST: Crea una carpeta llamada Descargas Drive en el escritorio y guarda
     el archivo dentro de la misma
     """
+    CADENA = "\ "
+    BARRA = CADENA[0]
+
     #Localización de la descarga
-    nombre_carpeta = 'Descargas Drive'
-    ruta = os.path.join(carpeta_actual, nombre_carpeta)
+    nombre_carpeta = 'Descargas_Drive'
+    existe = archivos.verificar_archivo_directorio(ruta, nombre_carpeta)
+    if not existe:
+        ruta += (BARRA + nombre_carpeta)
+        generador_carpetas.generador_carpeta(nombre_carpeta, ruta)
 
     #Inicialización de la descarga
     solicitud_descarga = SERVICIO.files().get_media(fileId=id_archivo)
@@ -69,7 +76,7 @@ def descargar_archivo(id_archivo : str, nombre_archivo : str, carpeta_actual : s
 
     while terminado is False:
         status, terminado = descargar.next_chunk()
-        print("Download %d%%." % int(status.progress() * 100))
+        print("Descarga %d%%." % int(status.progress() * 100))
 
     #Escritura de archivo en binario dentro de carpeta Descargas Drive
     with open(os.path.join(ruta, nombre_archivo), 'wb') as f:
