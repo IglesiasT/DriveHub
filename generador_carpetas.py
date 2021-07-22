@@ -46,7 +46,7 @@ def generador_carpeta(nombre_carpeta: str, ruta_base: str) -> None:
 
 def averiguar_usuario_w(opciones: list) -> str:
     """
-    PRE  : Opciones es la lista de carpetas contenidas dentro de C:\users de la cual se filtraran solo
+    PRE  : Opciones es la lista de carpetas contenidas dentro de C:users de la cual se filtraran solo
            los que sean posibles nombres de usuario
     POST : Segun el usuario, la funcion devolvera el nombre del usuario elegido
     """
