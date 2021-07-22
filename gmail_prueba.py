@@ -172,11 +172,7 @@ def guardar_archivo(correo_recibido : dict, padron : str , alumnos : dict, servi
 
             lista.append( ruta_zip ) 
             print(lista)
-            
-            OS = generador_carpetas.platform.system()
-           
-            path = generador_carpetas.generador_ruta_base(OS) 
-            print("path: ",path)
+
             generador_carpetas.crear_carpetas(lista,ruta_evaluaciones)
 
         if booleano == False:
