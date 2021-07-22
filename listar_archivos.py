@@ -1,6 +1,6 @@
 from service_drive import obtener_servicio
 
-def main() -> None:
+def listar_archivos() -> None:
     servicio = obtener_servicio()
     page_token = None
 
@@ -19,5 +19,3 @@ def main() -> None:
 
         if page_token is None:
             break
-
-main()
