@@ -65,8 +65,8 @@ def descargar_archivo(id_archivo : str, nombre_archivo : str, ruta : str) -> Non
     nombre_carpeta = 'Descargas_Drive'
     existe = archivos.verificar_archivo_directorio(ruta, nombre_carpeta)
     if not existe:
-        ruta += (BARRA + nombre_carpeta)
         generador_carpetas.generador_carpeta(nombre_carpeta, ruta)
+    ruta += (BARRA + nombre_carpeta)
 
     #Inicialización de la descarga
     solicitud_descarga = SERVICIO.files().get_media(fileId=id_archivo)
