@@ -212,7 +212,7 @@ def recibir_archivos(servicio : dict,correo : str, alumnos : dict , recibidos : 
     else:
         print("no sirve")
 
-def main():
+def inicio_gmail():
     
     archivo_ruta = generador_carpetas.generador_carpeta_zip()
 
@@ -233,4 +233,3 @@ def main():
     for correo in identificados:
         recibir_archivos(servicio,correo,alumnos,recibidos,archivo_ruta,ruta_evaluacion)
     
-main()
