@@ -52,7 +52,8 @@ def obtener_id(nombre_archivo : str) -> str:
 
 def descargar_archivo(id_archivo : str, nombre_archivo : str, carpeta_actual : str) -> None:
     """
-    PRE: Recibe una cadena con el id del archivo a descargar y su nombre
+    PRE: Recibe una cadena con el id del archivo a descargar, su nombre y la carpeta
+    donde se encuentra para realizar la descarga
     POST: Crea una carpeta llamada Descargas Drive en el escritorio y guarda
     el archivo dentro de la misma
     """
@@ -73,14 +74,3 @@ def descargar_archivo(id_archivo : str, nombre_archivo : str, carpeta_actual : s
     #Escritura de archivo en binario dentro de carpeta Descargas Drive
     with open(os.path.join(ruta, nombre_archivo), 'wb') as f:
         f.write(fh.read())  ###revisar fh.read()
-
-def main() -> None:
-    
-    #Pedido y validación de archivo (Drive reconoce las carpetas como archivos)
-    nombre_archivo = pedir_nombre_archivo()
-
-    id_archivo = obtener_id(nombre_archivo)
-
-    descargar_archivo(id_archivo, nombre_archivo)
-
-main()
