@@ -1,4 +1,9 @@
 import gmail_prueba
+import os
+import generador_carpetas
+import archivos
+import funciones_generales
+
 def validar_opcion(lista: list)->str:
     """
     Pre-condicion: (lista_de_opciones: list)
@@ -18,19 +23,23 @@ def mostrar_menu(lugar: str)->None:
     """
     if lugar == "drivehub":
         print("\nMenu del DriveHub:")
-        print("1-Mostrar archivos\n2-Crear archivos\n3-Subir archivo")
-        print("4-Sincronizar")
+        print("1-Mostrar archivos\n2-Crear archivo o carpeta\n3-Subir archivo\n4-Descargar archivo")
+        print("5-Sincronizar")
         print("M-mostrar menu\nS-Salir")
     elif lugar == "local":
         print("\nMenu local:")
-        print("1-Descargar eveluciones de alumnos\n2-Mostrar archivos\n3-Crear archivos\n4-Subir archivo")
-        print("5-Descargar archivo\n6-Sincronizar")
+        print("1-Descargar eveluciones de alumnos\n2-Mostrar archivos\n3-Crear archivo o carpeta\n4-Subir archivo")
+        print("\n5-Sincronizar")
         print("M-mostrar menu\nS-Salir")
     else:
-        print("\nMenu: \nR-Archivos del DriveGit\nL-Archivos locales\nM-mostrar menu\nS-Salir")
+        print("\nMenu: \nR-Archivos del DriveGit\nL-Archivos locales\nM-mostrar menu\nS-Salir")  
     
-    
-def definir_lugar(opc)->str:    
+def definir_lugar(opc: str)->str: 
+    """
+    Pre-condicion: (opcion: str)
+    Post-condicion: devulve el lugar como string
+    Define si el entorno es el local o el remoto, dependiendo dela opcion del usuario
+    """   
     if (opc in "R"):
         lugar = "drivehub"
     elif opc in "L":
@@ -39,8 +48,25 @@ def definir_lugar(opc)->str:
         lugar = "principales"
     return lugar
 
+def carpeta_o_archivo()->bool:
+    """
+    Pre-condicion: ninguna
+    Post-condicion: devuleve un booleano, True = carpeta | False = archivo
+    Le pregunta al usuario si quiere crear una carpeta o un archivo
+    """
+    print("\n")
+    carpeta = input("¿Desea crear una carpeta o un archivo? Carpeta = C | Archivo = A: ").upper()
+    while(len(carpeta) < 1 ) or ((carpeta not in "C") and (carpeta not in "A")):
+        carpeta=input("Error, intentelo nuevamente: ").upper()
+    if carpeta in "A":
+        carpeta = False
+    elif carpeta == "C":
+        carpeta = True
+
+    return carpeta
 
 def main()->None:
+    CARPETA_ACTUAL = os.getcwd()
     listas_opciones= {
         "principales":["R","L","S","M"],
         "local":["1","2","3","4","5", "6","S","M"],
@@ -57,18 +83,20 @@ def main()->None:
                 gmail_prueba.inicio_gmail()
 
             if (opc in "2"):
-                print("Mostrar archivos")
+                archivos.listar_directorio(CARPETA_ACTUAL)
 
             if (opc in "3"):
-                print("Crear archivos")
+                carpeta = carpeta_o_archivo()
+                if carpeta == True:
+                    nombre = funciones_generales.eleccion_nombre("Ingrese el nombre de la carpeta: ")
+                    generador_carpetas.generador_carpeta(nombre, CARPETA_ACTUAL)
+                else:
+                    archivos.crear_archivo(CARPETA_ACTUAL)
 
             if (opc in "4"):
                 print("Subir archivo")
 
             if (opc in "5"):
-                print("Descargar archivo")
-
-            if (opc in "6"):
                 print("Sincronizar")
 
         if (lugar == "drivehub"):
@@ -82,6 +110,9 @@ def main()->None:
                 print("Subir archivo")
 
             if (opc in "4"):
+                print("Descargar archivo")
+
+            if (opc in "5"):
                 print("Sincronizar")
 
 
@@ -91,5 +122,6 @@ def main()->None:
         opc = validar_opcion(listas_opciones[lugar])
         if (opc in "R") or (opc in "L"):
             definir_lugar(opc)
+
 main()
 
