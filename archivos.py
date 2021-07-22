@@ -108,7 +108,7 @@ def verificar_archivo_directorio(ruta_dir: str, archivo: str)->bool:
 
     return existe
 
-def fecha_modificiacion(ruta_archivo: str)-> str:
+def fecha_modificacion(ruta_archivo: str)-> str:
     modificacion = time.ctime(os.path.getmtime(ruta_archivo))
     print("mod: ", modificacion)
     return modificacion
