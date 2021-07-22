@@ -8,6 +8,9 @@ import shutil
 # os.remove(archivo)       # Elimina archivo
 # os.mkdir("Nombre_de_carpeta")
 # print(f"La ruta es: \n {os.listdir(directorio_actual)}")
+# os.mkdir(r"C:\users\Gonza\desktop\CON_ERRE")
+# os.mkdir("C:\\users\\Gonza\\desktop\\Doble_Barra")
+# os.mkdir("C:/users/Gonza/desktop/Barra_Normal")
 
 
 #       --Shutil--
