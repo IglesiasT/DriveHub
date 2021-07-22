@@ -1,3 +1,5 @@
+#Funcionalidades Drive
+import descargar_archivos, listar_archivos
 import gmail_prueba
 import os
 import generador_carpetas
@@ -104,6 +106,7 @@ def main()->None:
         if (lugar == "drivehub"): 
             if (opc in "1"): #Mostrar archivos
                 print("Mostrar archivos")
+                listar_archivos.listar_archivos()
 
             if (opc in "2"): #Crear archivos
                 print("Crear archivos")
@@ -113,6 +116,10 @@ def main()->None:
 
             if (opc in "4"): #Descargar archivo
                 print("Descargar archivo")
+                #Pedido y validación de archivo (Drive reconoce las carpetas como archivos)
+                nombre_archivo = descargar_archivos.pedir_nombre_archivo()
+                id_archivo = descargar_archivos.obtener_id(nombre_archivo)
+                descargar_archivos.descargar_archivo(id_archivo, nombre_archivo, CARPETA_ACTUAL)
 
             if (opc in "5"): #Sincronizar
                 print("Sincronizar")
