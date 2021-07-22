@@ -1,4 +1,7 @@
 import gmail_prueba
+import os
+import generador_carpetas
+import archivos
 def validar_opcion(lista: list)->str:
     """
     Pre-condicion: (lista_de_opciones: list)
@@ -41,6 +44,7 @@ def definir_lugar(opc)->str:
 
 
 def main()->None:
+    CARPETA_ACTUAL = os.getcwd()
     listas_opciones= {
         "principales":["R","L","S","M"],
         "local":["1","2","3","4","5", "6","S","M"],
