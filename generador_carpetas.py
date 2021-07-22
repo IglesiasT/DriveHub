@@ -26,7 +26,7 @@ def listar_carpetas(ruta_dir: str, printear = False) -> list:
         if os.path.isdir(ruta_completa):
             lista_carpetas.append(contenido)
             if printear:
-                print(ruta_completa)
+                print(contenido)
     return lista_carpetas
 
 
@@ -45,7 +45,7 @@ def generador_carpeta(nombre_carpeta: str, ruta_base: str) -> None:
     pidiendo_nombre = True
     while pidiendo_nombre:
         try:
-            os.mkdir(ruta_base + nombre_carpeta)
+            os.mkdir(ruta_base + "/" + nombre_carpeta)
         except IOError:
             if os.path.isdir(ruta_base + nombre_carpeta):
                 nombre_carpeta = input("La carpeta ya existe, ingrese otro nombre o Exit para cancelar: ")
@@ -74,7 +74,7 @@ def averiguar_usuario_w(opciones: list) -> str:
 
 def ruta_desk_w() -> str:
     ruta_base = r"C:\Users"
-    opciones = listar_carpetas(ruta_base)
+    opciones = archivos.listar_carpetas(ruta_base)
     USUARIO = averiguar_usuario_w(opciones)
     ruta_desktop = "C:/Users/" + USUARIO + "/desktop/"
     return ruta_desktop
@@ -84,7 +84,7 @@ def averiguar_usuario_linux(opciones: list) -> str:
     buscando = True
     USUARIO = ""
     for carpeta in opciones:
-        if buscando and os.path.isdir("/home/" + carpeta + "/Desktop"):
+        if buscando and os.path.isdir("/home/" + carpeta + "/Desktop/"):
             pregunta = input(f"Tu usuario es {carpeta}? (s/n): ")
             if pregunta == "s":
                 buscando = False
@@ -94,7 +94,7 @@ def averiguar_usuario_linux(opciones: list) -> str:
 
 def ruta_desk_linux() -> str:
     ruta_base = r"/home"
-    opciones = listar_carpetas(ruta_base)
+    opciones = archivos.listar_carpetas(ruta_base)
     USUARIO = averiguar_usuario_linux(opciones)
     ruta_desktop = "/home/" + USUARIO + "/desktop/"
     return ruta_desktop
@@ -143,7 +143,7 @@ def verificar_dir(direccion: str) -> str:
 
 
 def carpeta_evaluaciones() -> str:
-    existe = input("La carpeta de evaluaciones existe (1) o quieres crearla(2)? : ")
+    existe = input("La carpeta de evaluaciones existe (1) o quieres crearla (2)? : ")
     if existe == "1":
         direccion = input("Cual es la ruta completa de la carpeta: ")
         path = verificar_dir(direccion)
@@ -159,7 +159,7 @@ def carpeta_evaluaciones() -> str:
 def carpeta_docente(path: str, docente: str) -> str:
     if not os.path.isdir(path + docente):
         os.mkdir(path + docente)
-    path = path + docente + BARRA
+    path = path + docente + "/"
     return path
 
 
@@ -184,11 +184,11 @@ def crear_carpetas(info_alumno: list, carpeta_evaluacion: str) -> None:
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
     archivos.descomprimir_archivo(ubicacion_zip, path)
 
-
-def desempaquetar_orden(comando: str) -> list:
-    partes = comando.split(" - ")
-    return partes
-
+#
+# def desempaquetar_orden(comando: str) -> list:
+#     partes = comando.split(" - ")
+#     return partes
+#
 
 # def ejecutar_comandos() -> None:
 #     exit = False
