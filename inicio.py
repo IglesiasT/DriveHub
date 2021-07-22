@@ -2,6 +2,9 @@ import gmail_prueba
 import os
 import generador_carpetas
 import archivos
+import funciones_generales
+
+
 def validar_opcion(lista: list)->str:
     """
     Pre-condicion: (lista_de_opciones: list)
@@ -42,6 +45,20 @@ def definir_lugar(opc)->str:
         lugar = "principales"
     return lugar
 
+def carpeta_o_archivo()->bool:
+    print("\n")
+    carpeta = input("¿Desea crear una carpeta o un archivo? Carpeta = c | Archivo = A: ").upper()
+    while(len(carpeta) < 1 ) or ((carpeta not in "C") and (carpeta not in "A")):
+        carpeta=input("Error, intentelo nuevamente: ").upper()
+    if carpeta in "A":
+        carpeta = False
+    else:
+        carpeta = True
+
+    return carpeta
+
+
+
 
 def main()->None:
     CARPETA_ACTUAL = os.getcwd()
@@ -61,10 +78,15 @@ def main()->None:
                 gmail_prueba.inicio_gmail()
 
             if (opc in "2"):
-                print("Mostrar archivos")
+                archivos.listar_directorio(CARPETA_ACTUAL)
 
             if (opc in "3"):
-                print("Crear archivos")
+                carpeta = carpeta_o_archivo()
+                if carpeta == True:
+                    nombre = funciones_generales.eleccion_nombre("Ingrese el nombre de la carpeta: ")
+                    generador_carpetas.crear_carpeta(nombre, CARPETA_ACTUAL)
+                else:
+                    archivos.crear_archivo()
 
             if (opc in "4"):
                 print("Subir archivo")

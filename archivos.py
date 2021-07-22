@@ -1,6 +1,8 @@
 import zipfile
 import csv
 import os
+import funciones_generales
+import json
 
 def verificar_zip(ruta: str)->bool:
     """
@@ -42,6 +44,28 @@ def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
     except:
         pass
     archivo_zip.close
+
+def eleccion_tipo_archivos()->str:
+    print("\n")
+    tipo = input("Elija si crear un archivo .Json = j | .CSV = c | .text = t: ").upper()
+    eleccion = funciones_generales.verificar_pregunta_sino("¿Seguro que es el archivo que desea? Si = si |No = no: ").upper()
+    while eleccion in "NO":
+        tipo = input("Elija si crear un archivo .Json = j | .CSV = c | .text = t: ").upper()
+        eleccion = funciones_generales.verificar_pregunta_sino("¿Seguro que es el archivo que desea? Si = si |No = no: ").upper()
+    
+    return tipo
+
+def crear_archivo():
+    tipo = eleccion_tipo_archivos()
+    nombre = funciones_generales.eleccion_nombre("Ingrese el nombre del archivo: ")
+    if tipo in "T":
+        nombre = nombre +".txt"
+    if tipo in "C":
+        nombre = nombre +".csv"
+    if tipo in "J":
+        nombre = nombre +".json"
+    open(nombre, "w").close()
+
 
 def listar_directorio(ruta_dir: str)->None:
     """
