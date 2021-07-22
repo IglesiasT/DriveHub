@@ -22,6 +22,5 @@ import shutil
 #  Mueve el archivo desde la ubicación actual a la
 # carpeta "Documentos". Osea que tambien los remueve de la ubicacion original
 # shutil.move("archivo.txt", "Documentos/archivo.txt")
-
-
+# shutil.rmtree("C:/Users/USUARIO/desktop/descargas_zip")
 
