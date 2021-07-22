@@ -16,7 +16,8 @@ CADENA = "\ "
 BARRA = CADENA[0]
 
 
-# ### Prestado de Ro ###
+def crear_carpeta(ruta_actual: str) -> None:
+    os.mkdir(ruta_actual)
 
 
 def listar_carpetas(ruta_dir: str, printear = False) -> list:
@@ -183,34 +184,3 @@ def crear_carpetas(info_alumno: list, carpeta_evaluacion: str) -> None:
     path = carpeta_docente(path, docente)
     path = carpeta_alumno(path, nombre_alumno, padron_alumno)
     archivos.descomprimir_archivo(ubicacion_zip, path)
-
-#
-# def desempaquetar_orden(comando: str) -> list:
-#     partes = comando.split(" - ")
-#     return partes
-#
-
-# def ejecutar_comandos() -> None:
-#     exit = False
-#     ruta = ""
-#     # print reglas comando
-#     usuario = conseguir_usuario()
-#     while not exit:
-#         # listar opciones
-#         comando = input(f"{usuario}: ")
-#         orden = desempaquetar_orden(comando)
-#         if orden[0] == "cd":
-#             if orden[1] == ".."
-#                 # def borrar ultima ruta
-#             else:
-#                 # redefinir ruta y
-#         elif orden[0] == "mk":
-#             # Crear carpeta o archivo
-#         elif orden[0] == "help":
-#             # printear reglas comando
-#         elif orden[0] == "exit":
-#             exit = True
-#         else:
-#             print("El comando es invalido, si necesita ayuda utilice 'help' ")
-# info = ["107717", "Fiamini, Carlos", "C:/users/Gonza/desktop/107789 - Ebbes, Gonzalo/107789 - Ebbes, Gonzalo.zip"]
-# crear_carpetas(info)
