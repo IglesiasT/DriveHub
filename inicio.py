@@ -26,13 +26,13 @@ def mostrar_menu(lugar: str)->None:
     """
     if lugar == "drivehub":
         print("\nMenu del DriveHub:")
-        print("1-Mostrar archivos\n2-Crear archivo o carpeta\n3-Subir archivo\n4-Descargar archivo")
-        print("5-Sincronizar\n6-volver al menu principal")
+        print("1-Mostrar archivos\n2-Crear archivo o carpeta\n3-Descargar archivo")
+        print("4-Sincronizar\nP-volver al menu principal")
         print("M-mostrar menu\nS-Salir")
     elif lugar == "local":
         print("\nMenu local:")
-        print("1-Descargar eveluciones de alumnos\n2-Mostrar archivos\n3-Crear archivo o carpeta\n4-Subir archivo")
-        print("5-Sincronizar\n6-volver al menu principal")
+        print("1-Descargar eveluciones de alumnos\n2-Mostrar archivos\n3-Crear archivo o carpeta\n4-Sincronizar")
+        print("5-Subir archivo\nP-volver al menu principal")
         print("M-mostrar menu\nS-Salir")
     else:
         print("\nMenu: \nR-Archivos del DriveGit\nL-Archivos locales\nM-mostrar menu\nS-Salir")  
@@ -73,8 +73,8 @@ def main()->None:
     OS = platform.system()
     listas_opciones= {  #Son las opcciones que puede elegir el usurio dependiendo de cada menu
         "principales":["R","L","S","M"],
-        "local":["1","2","3","4","5","6","S","M"],
-        "drivehub":["1","2","3","4","5","6","S","M"]
+        "local":["1","2","3","4","5","P","S","M"],
+        "drivehub":["1","2","3","4","P","S","M"]
     }
     lugar = ""  #El lugar puede ser local o en el drivehub
     mostrar_menu(lugar)
@@ -97,7 +97,7 @@ def main()->None:
                 else:
                     archivos.crear_archivo(CARPETA_ACTUAL)
 
-            if (opc in "4"): #Subir archivo
+            if (opc in "5"): #Subir archivo
                 print("Subir archivo")
 
         if (lugar == "drivehub"): 
@@ -108,20 +108,17 @@ def main()->None:
             if (opc in "2"): #Crear archivos
                 print("Crear archivos")
 
-            if (opc in "3"): #Subir archivo
-                print("Subir archivo")
-
-            if (opc in "4"): #Descargar archivo
+            if (opc in "3"): #Descargar archivo
                 print("Descargar archivo")
                 #Pedido y validación de archivo (Drive reconoce las carpetas como archivos)
                 nombre_archivo = descargar_archivos.pedir_nombre_archivo()
                 id_archivo = descargar_archivos.obtener_id(nombre_archivo)
                 descargar_archivos.descargar_archivo(id_archivo, nombre_archivo, CARPETA_ACTUAL)
 
-        if (opc in "5"): #Sincronizar
+        if (opc in "4"): #Sincronizar
             print("Sincronizar")
 
-        if(opc == "6"):
+        if(opc == "P"):
             lugar = "principales"
 
         if (opc in "M"):
