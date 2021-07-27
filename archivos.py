@@ -42,7 +42,7 @@ def descomprimir_archivo(ruta_zip: str, ruta_extraccion: str)->None:
         print(archivo_zip.namelist())
         archivo_zip.extractall(pwd=contraseña, path=ruta_extraccion)
     except:
-        pass
+        print("\nError al descomprimir el archivo")
     archivo_zip.close
 
 def eleccion_tipo_archivos()->str:
@@ -138,4 +138,6 @@ def fecha_modificacion(ruta_archivo: str)-> str:
     modificacion = time.ctime(os.path.getmtime(ruta_archivo))
     print("mod: ", modificacion)
     return modificacion
+
+
 
