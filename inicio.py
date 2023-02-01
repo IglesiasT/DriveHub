@@ -25,17 +25,17 @@ def mostrar_menu(lugar: str)->None:
     Muestra las opciones del menu, dependiendo donde se encuentre
     """
     if lugar == "drivehub":
-        print("\nMenu del DriveHub:")
+        print("\nMenu de DriveHub:")
         print("1-Mostrar archivos\n2-Crear archivo o carpeta\n3-Descargar archivo")
         print("4-Sincronizar\nP-volver al menu principal")
         print("M-mostrar menu\nS-Salir")
     elif lugar == "local":
         print("\nMenu local:")
-        print("1-Descargar eveluciones de alumnos\n2-Mostrar archivos\n3-Crear archivo o carpeta\n4-Sincronizar")
+        print("1-Descargar evaluciones de alumnos\n2-Mostrar archivos\n3-Crear archivo o carpeta\n4-Sincronizar")
         print("5-Subir archivo\nP-volver al menu principal")
         print("M-mostrar menu\nS-Salir")
     else:
-        print("\nMenu: \nR-Archivos del DriveGit\nL-Archivos locales\nM-mostrar menu\nS-Salir")  
+        print("\nMenu: \nR-Archivos de DriveHub\nL-Archivos locales\nM-mostrar menu\nS-Salir")  
     
 def definir_lugar(opc: str)->str: 
     """
